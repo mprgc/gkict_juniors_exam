@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GK ICT Junior Starter Exam </title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- html2canvas CDN for converting HTML to JPEG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        /* Custom styles for Sinhala font and background */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px; /* Reduced overall padding */
+            box-sizing: border-box;
+            
+            /* --- COPY PREVENTION (පාඨ පිටපත් කිරීම වැළැක්වීම) --- */
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+        }
+        .quiz-card {
+            max-width: 550px; /* Reduced max width slightly */
+            width: 100%;
+            background-color: white;
+            padding: 1.25rem; /* Reduced padding */
+            border-radius: 0.75rem; /* Slightly smaller border radius */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 640px) {
+            /* Responsive adjustments for mobile font sizes */
+            .quiz-card h1 {
+                font-size: 1.35rem; /* Slightly smaller main title on mobile */
+            }
+            .question-text {
+                font-size: 1.0rem; /* Smaller question text on mobile */
+            }
+        }
+
+        .option-button {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            padding: 0.75rem; /* Reduced option button padding */
+            font-size: 1.0rem; /* Kept option text size reasonable */
+        }
+        .option-button:hover:not(.disabled) {
+            background-color: #e0f2f1; /* Light cyan on hover */
+        }
+        /* Specific colors for feedback */
+        .correct-answer {
+            background-color: #84cc16 !important; /* Lime 500 - කොළ පාට (නිවැරදි) */
+            color: white !important;
+            border-color: #65a30d !important;
+        }
+        .incorrect-answer {
+            background-color: #ef4444 !important; /* Red 500 - රතු පාට (වැරදි) */
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        /* Timer bar style */
+        #timer-progress {
+            transition: width 1s linear;
+        }
+        
+        /* Modal Animation Styles */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-enter-animation {
+            animation: modalFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        /* Styles for the Capture Card (Made smaller and more compact) */
+        #result-card-to-capture {
+            background-color: #e0f7fa; /* Light cyan background for the certificate look */
+            border: 3px solid #00bcd4; /* Slightly thinner border */
+        }
+        .logo-placeholder {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card">
+    <!-- Reduced H1 size from text-3xl to text-2xl -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">ICT Junior Starter Final Exam 2025 </h1>
+    <!-- Reduced text size from text-md to text-sm -->
+    <p class="text-center text-sm text-blue-700 mb-6 font-semibold">GK ICT School අපි විභාග ලියන අලුත් විදිහ.</p>
+
+    <!-- 1. START SCREEN -->
+    <!-- Reduced padding and shadow -->
+    <div id="start-screen" class="text-center p-5 bg-blue-50 rounded-lg shadow"> 
+        <!-- Reduced H2 size from text-2xl to text-xl -->
+        <h2 class="text-xl font-extrabold mb-4 text-blue-800">ප්‍රශ්නාවලිය ආරම්භ කිරීමට සූදානම්ද?</h2>
+        
+        <!-- Student Name Input -->
+        <div class="mb-3 text-left">
+            <!-- Reduced label size from text-sm to text-xs -->
+            <label for="student-name" class="block text-xs font-medium text-gray-700 mb-1">ශිෂ්‍යයාගේ නම (Student Name):</label>
+            <!-- Reduced input padding from p-3 to p-2.5 -->
+            <input type="text" id="student-name" placeholder="ඔබේ සම්පුර්ණ නම " class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+        </div>
+        <!-- Student Class Input -->
+        <div class="mb-4 text-left">
+            <!-- Reduced label size from text-sm to text-xs -->
+            <label for="student-class" class="block text-xs font-medium text-gray-700 mb-1">පන්තිය (Class):</label>
+            <!-- Reduced input padding from p-3 to p-2.5 -->
+            <input type="text" id="student-class" placeholder="උදා: 10 වසර සජීවා පන්තිය" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+        </div>
+        
+        <!-- Reduced button padding and text size -->
+        <button onclick="showInstructions()" class="w-full bg-gray-200 text-gray-700 py-1 text-sm rounded-lg hover:bg-gray-300 transition duration-300 mb-3 shadow-sm">
+            උපදෙස් කියවන්න (Read Instructions)
+        </button>
+        
+        <!-- Reduced button padding and text size from text-2xl to text-xl -->
+        <button onclick="validateAndStartQuiz()" class="w-full bg-blue-600 text-white py-3 text-xl rounded-lg hover:bg-blue-700 transition duration-300 shadow-lg transform hover:scale-[1.01]">
+            Start Quiz
+        </button>
+        <!-- Reduced validation message size from text-sm to text-xs -->
+        <p id="validation-message" class="text-red-600 mt-2 text-xs font-semibold hidden">නම සහ පන්තිය ඇතුළත් කිරීම අනිවාර්යයි! (Name and Class are required!)</p>
+    </div>
+
+    <!-- 2. TIMER DISPLAY -->
+    <div id="timer-display" class="mb-3 text-center hidden">
+        <div id="timer-bar" class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"> <!-- Reduced height -->
+            <div id="timer-progress" class="h-1.5 bg-red-500 transition-all duration-1000 ease-linear" style="width: 100%;"></div>
+        </div>
+        <!-- Reduced text size from text-sm to text-xs -->
+        <p class="mt-1 text-xs text-gray-600 font-medium"><span id="time-left">40</span> තත්පර ඉතිරිව ඇත (Time Left)</p>
+    </div>
+    
+    <!-- 3. QUIZ CONTAINER -->
+    <div id="quiz-container" class="hidden">
+        <!-- Question and options will be rendered here -->
+    </div>
+    
+    <!-- 4. RESULTS CONTAINER -->
+    <div id="results-container" class="hidden">
+        
+        <!-- Result Card to be captured by html2canvas -->
+        <!-- Reduced padding from p-8 to p-5 -->
+        <div id="result-card-to-capture" class="p-5 rounded-lg mb-4 shadow-xl"> 
+            <!-- Corrected image path: Replaced local '01.png' with a placeholder image URL -->
+            <img 
+                src="01.png" 
+                alt="GK ICT Logo" 
+                class="logo-placeholder w-16 h-16 mx-auto mb-3"
+            >
+            <!-- Reduced H2 size from text-3xl to text-2xl -->
+            <h2 class="text-2xl font-extrabold text-center mb-1 text-blue-900">ප්‍රශ්නාවලියේ අවසන් ප්‍රතිඵලය</h2>
+            <!-- Reduced text size from text-lg to text-base, border-b padding reduced -->
+            <p class="text-center text-base text-gray-700 mb-4 border-b pb-3 border-blue-400"> GK ICT Juniors Exam 2025</p>
+            
+            <!-- Student Info Display on Result Card -->
+            <div class="mb-4 text-center">
+                <!-- Reduced text size from text-xl to text-lg -->
+                <p class="text-lg font-bold text-gray-800 mb-1">නම: <span id="display-student-name" class="font-extrabold text-blue-800">--</span></p>
+                <!-- Reduced text size from text-md to text-sm -->
+                <p class="text-sm font-semibold text-gray-600">පන්තිය: <span id="display-student-class" class="font-bold text-blue-700">--</span></p>
+            </div>
+
+            <!-- Detailed Score and Percentage Display -->
+            <!-- Reduced text size from text-xl to text-lg -->
+            <p id="correct-answers-count" class="text-lg font-bold text-center mb-2 text-gray-700"></p>
+            <!-- Reduced text size from text-2xl to text-xl (This is the main score) -->
+            <p id="final-percentage" class="text-3xl font-black text-center mb-3"></p>
+
+            <!-- Reduced text size from text-sm to text-xs -->
+            <p id="result-date" class="text-xs text-center text-gray-600">දිනය සහ වේලාව: --</p>
+        </div>
+        
+        <!-- Action Buttons (outside the capture area) -->
+        <!-- Reduced button padding and margin -->
+        <button onclick="captureResultsAsImage()" class="w-full bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700 transition duration-300 mb-3 shadow-md transform hover:scale-[1.02]">
+            ප්‍රතිඵල ලේඛනය බාගත කරන්න (JPEG)
+        </button>
+        
+        <!-- Reduced button padding -->
+        <!--button onclick="resetQuizState()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition duration-300">
+            නැවත මුලට යන්න (Go to Start)
+        </button-->
+    </div>
+</div>
+
+<!-- 5. INSTRUCTION MODAL (POPUP MENU) -->
+<div id="instruction-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden">
+    <div id="modal-content" class="bg-white rounded-xl shadow-2xl p-5 m-4 max-w-sm sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <!-- Reduced H3 size from text-2xl to text-xl -->
+        <h3 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1.5">⚠️ ප්‍රශ්නාවලියේ උපදෙස්</h3>
+        
+        <!-- Reduced text size from text-base to text-sm -->
+        <ul class="text-left text-gray-700 space-y-2 list-disc list-inside mb-4 text-sm">
+            <li>සියලුම ප්‍රශ්න සඳහා පිළිතුරු දියයුතුය.</li>
+            <li>සෑම ප්‍රශ්නයක් සඳහාම පිළිතුරු දීමට ඔබට තත්පර 30ක කාලයක් ලැබේ.</li>
+            <li>නියමිත කාලය තුළ පිළිතුරු ලබා දීමට නොහැකි වුවහොත් එය අවසන් ලකුණු වලට එකතු වන්නේ නැත.</li>
+            <li>ගැටළුවක් ඇතිනම් ගයාන් සර්ව අමතන්න. (විමසීම්: 071 327 6655 )</li>
+            <li>👮 ආරක්ෂක නීති (Security Rules):
+                <ul class="list-disc list-inside ml-4 mt-1 space-y-0.5 text-xs text-red-600 font-medium"> <!-- Reduced nested list size -->
+                    <li>Right click කිරීම සහ Mobile long press කිරීම අවහිර කර ඇත.</li>
+                    <li>වෙනත් Tab එකකට හෝ Window එකකට මාරු වුවහොත් ප්‍රශ්නාවලියේ ප්‍රශ්න වෙනස්වී ආරම්භ විය හැක. කල්පනාකාරී වන්න.</li>
+                    <li>ප්‍රශ්න Copy & Past කිරීම අවහිර කර ඇත.</li>
+
+                </ul>
+            </li>
+        </ul>
+        
+        <!-- Reduced button padding -->
+        <button onclick="hideInstructions()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition duration-300 shadow-lg">
+            තේරුම් ගත්තා 👍 (Got It)
+        </button>
+    </div>
+</div>
+
+<script>
+    // ----------------------------------------------------------------------
+    // [SECURITY ENHANCEMENTS - ආරක්ෂක වැඩි දියුණු කිරීම්]
+    // ----------------------------------------------------------------------
+
+    // --- 2. F12, Ctrl/Cmd + Shortcuts PREVENTION (කෙටිමං අවහිර කිරීම) ---
+    document.addEventListener('keydown', function (e) {
+        // F12 key (e.key === 'F12' or e.keyCode === 123)
+        if (e.key === 'F12' || e.keyCode === 123) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+Shift+I, Ctrl+Shift+J (Windows/Linux) - Developer Tools
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) {
+            e.preventDefault();
+        }
+        
+        // Ctrl+U (Windows/Linux) - View Source
+        if (e.ctrlKey && e.key === 'U') {
+            e.preventDefault();
+        }
+
+        // Cmd+Option+I (Mac) - Developer Tools
+        if (e.metaKey && e.altKey && e.key === 'I') {
+            e.preventDefault();
+        }
+        
+        // Cmd+Option+J (Mac) - Developer Tools
+        if (e.metaKey && e.altKey && e.key === 'J') {
+            e.preventDefault();
+        }
+    });
+
+    // --- 3. RIGHT CLICK AND LONG PRESS PREVENTION (Right Click සහ Long Press වැළැක්වීම) ---
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+    
+    // ----------------------------------------------------------------------
+    // [QUIZ LOGIC - ප්‍රශ්නාවලියේ කේතය]
+    // ----------------------------------------------------------------------
+    
+    // Constants for the quiz
+    const TIME_LIMIT = 30; // තත්පර වලින් කාලය
+
+    // [SHUFFLE CONFIGURATION - අහඹු ලෙස පෙළගැස්වීමේ සැකසුම්]
+    // ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීමට true කරන්න, එසේ නොමැති නම් false කරන්න.
+    const SHUFFLE_QUESTIONS = true; 
+    
+    // [NEW: AUTO RESET CONFIGURATION - ස්වයංක්‍රීය යළි පිහිටුවීමේ සැකසුම්]
+    // වෙනත් Tab එකකට මාරු වූ විට ස්වයංක්‍රීයව යළි පිහිටුවීම සක්‍රියද/අක්‍රියද යන්න
+    // true: යළි පිහිටුවීම සිදුවේ | false: යළි පිහිටුවීම සිදු නොවේ
+    const AUTO_RESET_ON_TAB_SWITCH = true; // <--- ඔබට වෙනස් කිරීමට අවශ්‍ය නියතය මෙයයි
+    
+    // Global variables
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let isQuestionLocked = false;
+    let timeRemaining = TIME_LIMIT;
+    let timerInterval;
+
+    // NEW: Global variables for student info
+    let studentName = '';
+    let studentClass = '';
+
+    // DOM elements
+    const startScreen = document.getElementById('start-screen');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultsContainer = document.getElementById('results-container');
+    const timerDisplay = document.getElementById('timer-display');
+    const instructionModal = document.getElementById('instruction-modal'); // MODAL CONTAINER
+    const modalContent = document.getElementById('modal-content'); // MODAL CONTENT DIV (for animation)
+
+    // ----------------------------------------------------------------------
+    // [MODAL FUNCTIONS - Popup Menu ක්‍රියාකාරීත්වය]
+    // ----------------------------------------------------------------------
+
+    function showInstructions() {
+        instructionModal.classList.remove('hidden');
+        // Add animation class when showing the modal
+        modalContent.classList.add('modal-enter-animation');
+    }
+
+    function hideInstructions() {
+        // Remove animation class and hide the modal
+        instructionModal.classList.add('hidden');
+        modalContent.classList.remove('modal-enter-animation');
+    }
+
+    // ----------------------------------------------------------------------
+    // [STUDENT INFO VALIDATION]
+    // ----------------------------------------------------------------------
+    
+    function validateAndStartQuiz() {
+        const nameInput = document.getElementById('student-name');
+        const classInput = document.getElementById('student-class');
+        const validationMessage = document.getElementById('validation-message');
+
+        studentName = nameInput.value.trim();
+        studentClass = classInput.value.trim();
+
+        if (studentName === '' || studentClass === '') {
+            validationMessage.classList.remove('hidden');
+            // Shake effect for attention (optional)
+            nameInput.classList.add('ring-2', 'ring-red-500');
+            classInput.classList.add('ring-2', 'ring-red-500');
+            setTimeout(() => {
+                nameInput.classList.remove('ring-2', 'ring-red-500');
+                classInput.classList.remove('ring-2', 'ring-red-500');
+            }, 500);
+            return;
+        }
+
+        validationMessage.classList.add('hidden');
+        startQuiz(); // Proceed to start the quiz
+    }
+
+    // ----------------------------------------------------------------------
+    // [ප්‍රශ්නාවලියේ දත්ත / QUIZ DATA SECTION]
+    // ----------------------------------------------------------------------
+    const quizData = [
+    // Q1
+    {
+        question: "ICT යන්නෙහි සිංහල තේරුම කුමක්ද?",
+        correct: "තොරතුරු හා සන්නිවේදන තාක්ෂණය.",
+        distractors: [
+                "තොරතුරු තාක්ෂණය.",
+                "සන්නිවේදන තාක්ෂණය.",
+                "තොරතුරු සහ දත්ත තාක්ෂණය."
+        ]
+    },
+    // Q2
+    {
+        question: "තොරතුරු හා සන්නිවේදන තාක්ෂණය (ICT) යනු කුමක්ද?",
+        correct: "කිසියම් තොරතුරක් තාක්ෂණය ඔස්සේ ගබඩා කිරීම, සන්නිවේදනය හෝ හුවමාරු කරගැනීමයි.",
+        distractors: [
+                "දත්ත ඇතුළත් කිරීම, දත්ත සැකසීම, සහ සැකසූ දත්ත පිටතට ලබා දීමයි.",
+                "කිසියම් තොරතුරක් තාක්ෂණය ඔස්සේ ගබඩා කිරීම සහ සැකසීමයි.",
+                "කිසියම් දත්තයක් තාක්ෂණය ඔස්සේ හුවමාරු කරගැනීම පමණි."
+        ]
+    },
+    // Q3
+    {
+        question: "බැංකු කටයුතු සඳහා ICT භාවිත නොවන අවස්ථාවක් නම් කරන්න.",
+        correct: "මිසයිල හැසිරවීම",
+        distractors: [
+                "ණයපත් (Credit Card) ලබාදීම.",
+                "අන්තර්ජාල මුදල් හුවමාරුව",
+                "ATM යන්ත්‍ර මඟින් මුදල් තැම්පත් කිරීම"
+        ]
+    },
+    // Q4
+    {
+        question: "අධ්‍යාපනය සඳහා භාවිත වන වීඩියෝ තාක්ෂණයට උදාහරණයක් දෙන්න.",
+        correct: "Zoom හෝ Microsoft Teams.",
+        distractors: [
+                "Zoom සහ twitter පමණි.",
+                "E-mail සහ Web Browsers.",
+                "Facebook Messenger හෝ Instagram."
+        ]
+    },
+    // Q5
+    {
+        question: "වෛද්‍ය ක්ෂේත්‍රයේ ICT භාවිතයට උදාහරණයක් කුමක්ද?",
+        correct: "EEG හෝ ECG පරීක්ෂණ.",
+        distractors: [
+                "Youtube Music, හෝ Facebook භාවිතය.",
+                "ATM යන්ත්‍ර ක්‍රියාකාරීත්වය",
+                "පරිගණක ක්‍රීඩා"
+        ]
+    },
+    // Q6
+    {
+        question: "ආරක්ෂක කටයුතු සඳහා ICT යොදාගන්නා ආකාරයක් සඳහන් කරන්න.",
+        correct: "මිසයිල සහ ගුවන්යානා හැසිරවීම.",
+        distractors: [
+                "රථවාහන පාලනය. පමණක් සිදුකල හැකිය.",
+                "ගුවන්යානා හැසිරවීම පමණි.",
+                "මුදල් ගණුදෙනු සඳහා ප්‍රවාහනය සැපයීම."
+        ]
+    },
+    // Q7
+    {
+        question: "විනෝදාස්වාදය සඳහා ICT භාවිතයට උදාහරණයක් දෙන්න.",
+        correct: "පරිගණක ක්‍රීඩා, Youtube Music, හෝ Facebook භාවිතය.",
+        distractors: [
+                "ක්‍රමලේඛ නිර්මාණය කිරීම.",
+                "Youtube පාඩම් වැඩසටහනක් නැරබීම",
+                "PowerPoint Presentation සෑදීම."
+        ]
+    },
+    // Q8
+    {
+        question: "පරිගණකය යනු කුමන ආකාරයේ උපකරණයක්ද?",
+        correct: "තොරතුරු හෝ දත්ත හසුරුවන ඉලෙක්ට්‍රොනික උපකරණයකි.",
+        distractors: [
+                "තොරතුරු හසුරුවන යාන්ත්‍රික උපකරණයකි.",
+                "දත්ත පමණක් හසුරුවන ඉලෙක්ට්‍රොනික උපකරණයකි.",
+                "දත්ත ගබඩා කරන උපකරණයකි."
+        ]
+    },
+    // Q9
+    {
+        question: "පරිගණකයක මූලික කාර්යයන් තුන මොනවාද?",
+        correct: "දත්ත ඇතුළත් කිරීම, දත්ත සැකසීම, සහ සැකසූ දත්ත (තොරතුරු) පිටතට ලබා දීම.",
+        distractors: [
+                "දත්ත ඇතුළත් කිරීම, දත්ත ගබඩා කිරීම, සහ තොරතුරු ලබා දීම.",
+                "දත්ත ගබඩා කිරීම, දත්ත සැකසීම, සහ දත්ත පරිවර්තනය.",
+                "දත්ත සැකසීම, ගබඩා කිරීම, සහ සන්නිවේදනය කිරීම."
+        ]
+    },
+    // Q10
+    {
+        question: "ඇබකසය නිර්මාණය කරන ලද්දේ ආසන්න වශයෙන් වසර කීයකට පෙරද?",
+        correct: "වසර 5000 කට පෙර.",
+        distractors: [
+                "වසර 4000 කට පෙර.",
+                "වසර 6000 කට පෙර.",
+                "වසර 500 කට පෙර."
+        ]
+    },
+    // Q11
+    {
+        question: "ඇබකසය හඳුන්වනු ලබන වෙනත් නමක් කුමක්ද?",
+        correct: "ගණන් කිරීමේ රාමුව.",
+        distractors: [
+                "ගණිතමය යන්ත්‍රය.",
+                "දත්ත සැකසීමේ රාමුව.",
+                "පරිගණක රාමුව."
+        ]
+    },
+    // Q12
+    {
+        question: "ඇබකසය මගින් සිදු කළ හැකිවූ ගණිත කර්ම මොනවාද?",
+        correct: "එකතු කිරීම සහ අඩු කිරීම පමණි.",
+        distractors: [
+                "එකතු කිරීම, අඩු කිරීම සහ ගුණ කිරීම පමණි.",
+                "එකතු කිරීම, අඩු කිරීම, ගුණ කිරීම සහ බෙදීම.",
+                "එකතු කිරීම පමණි."
+        ]
+    },
+    // Q13
+    {
+        question: "පරිගණකයේ පියා ලෙස සලකනු ලබන්නේ කවුද?",
+        correct: "චාල්ස් බැබේජ්.",
+        distractors: [
+                "බ්ලේස් පැස්කල්.",
+                "ඇඩා ලව්ලේස්.",
+                "ඇලන් ටියුරින්."
+        ]
+    },
+    // Q14
+    {
+        question: "චාල්ස් බැබේජ් විසින් නිර්මාණය කළ පළමු යාන්ත්‍රික පරිගණක සැලැස්ම කුමක්ද?",
+        correct: "විශ්ලේෂණ එන්ජිම (Analytical Engine).",
+        distractors: [
+                "වෙනස්කම් එන්ජිම (Difference Engine).",
+                "යාන්ත්‍රික පරිගණකය (Mechanical Computer).",
+                "මුල් පරිගණකය (Initial Computer)."
+        ]
+    },
+    // Q15
+    {
+        question: "විශ්ලේෂණ එන්ජිම (Analytical Engine) සංවර්ධනය කරන ලද්දේ කුමන සියවසේදී ද?",
+        correct: "19 වන සියවසේදී (1837 දී).",
+        distractors: [
+                "18 වන සියවසේදී.(1800 දී)",
+                "20 වන සියවසේදී.(1950 දී)",
+                "21 වන සියවසේදී.(2007 දී)"
+        ]
+    },
+    // Q16
+    {
+        question: "සංදර්ශකය සඳහා භාවිත වන ඉංග්‍රීසි නාම මොනවාද?",
+        correct: "Display, Screen, Monitor.",
+        distractors: [
+                "Projector, Screen, Display.",
+                "Printer, Screen, Monitor.",
+                "Display, Keyboard, Monitor."
+        ]
+    },
+    // Q17
+    {
+        question: "උකුළු පරිගණකය සඳහා ඉංග්‍රීසි නාමය කුමක්ද?",
+        correct: "Laptop computer.",
+        distractors: [
+                "Notebook computer.",
+                "Desktop computer.",
+                "Handheld device."
+        ]
+    },
+    // Q18
+    {
+        question: "3d කණ්ණාඩියක් නිර්මාණය කිරීමට එහි වීදුරුව සඳහා  සඳහා භාවිතා කරන වර්ණ දෙක මොනවාද?",
+        correct: "රතු සහ නිල්",
+        distractors: [
+                "නිල් සහ කොළ",
+                "රතු සහ කහ ",
+                "කහ සහ නිල් "
+        ]
+    },
+    // Q19
+    {
+        question: "සේවාදායක පරිගණකයට සඳහා ඉංග්‍රීසි නාමය කුමක්ද?",
+        correct: "Server computer.",
+        distractors: [
+                "Client computer.",
+                "Workstation computer.",
+                "Mainframe computer."
+        ]
+    },
+    // Q20
+    {
+        question: "පරිගණකයක ප්‍රධාන දෘඩාංග (hardware) කොටස් හතරක් නම් කරන්න.",
+        correct: "සංදර්ශකය (Monitor), පද්ධති ඒකකය (System Unit), මූසිකය (Mouse), යතුරු පුවරුව (Keyboard).",
+        distractors: [
+                "සංදර්ශකය (Monitor), පද්ධති ඒකකය (System Unit), මූසිකය (Mouse), මුද්‍රණ යන්ත්‍රය (Printer).",
+                "මව් පුවරුව (Motherboard), CPU, RAM, දෘඩ තැටිය (Hard Disk).",
+                "සංදර්ශකය (Monitor), CPU, UPS, යතුරු පුවරුව (Keyboard)."
+        ]
+    },
+    // Q21
+    {
+        question: "පරිගණකය භාවිත කිරීමේදී නිවැරදි ඉරියව් අනුගමනය කිරීම වැදගත් වන්නේ ඇයි?",
+        correct: "විවිධ සෞඛ්‍ය ගැටලු ඇතිවීම වළක්වා ගැනීමට.",
+        distractors: [
+                "පරිගණකයට හානි වීම වළක්වා ගැනීමට.",
+                "වැඩ කිරීමේ වේගය වැඩි කර ගැනීමට.",
+                "ඇස් රිදීම පමණක් වළක්වා ගැනීමට."
+        ]
+    },
+    // Q22
+    {
+        question: "පරිගණකය ක්‍රියා විරහිත කිරීම හඳුන්වන්නේ කුමන නමින්ද?",
+        correct: "Shutdown.",
+        distractors: [
+                "Restart.",
+                "Hibernate.",
+                "Log Off."
+        ]
+    },
+    // Q23
+    {
+        question: "පරිගණකය නිසි පිළිවෙළට ක්‍රියා විරහිත නොකළහොත් සිදුවිය හැක්කේ කුමක්ද?",
+        correct: "පරිගණකයට හානි සිදුවිය හැකිය.",
+        distractors: [
+                "නැවත පරිගණකය on වේ.",
+                "අපේ වැඩසටහන් විවෘත වේ.",
+                "පරිගණකය නැවත ක්‍රියා විරහිත කළ යුතුය."
+        ]
+    },
+    // Q24
+    {
+        question: "පරිගණක තිරයේ දිස්වන ඊ හිස (pointer) පාලනය කරන්නේ කුමන උපකරණය මගින්ද?",
+        correct: "මූසිකය (Mouse) මගිනි.",
+        distractors: [
+                "යතුරු පුවරුව (Keyboard) මගිනි.",
+                "ස්කෑනරය (Scanner) මගිනි.",
+                "ට්‍රැක්පෑඩ් (Trackpad) මගිනි."
+        ]
+    },
+    // Q25
+    {
+        question: "සාමාන්‍ය මූසිකයක ඇති ප්‍රධාන කොටස් මොනවාද?",
+        correct: "වම් සහ දකුණු බොත්තම් සහ මැද ඇති කුඩා රෝදය.",
+        distractors: [
+                "වම් සහ දකුණු බොත්තම් පමණි.",
+                "වම් බොත්තම සහ මැද ඇති කුඩා රෝදය පමණි.",
+                "දකුණු බොත්තම සහ චලන සංවේදකය (Sensor) පමණි."
+        ]
+    },
+    // Q26
+    {
+        question: "අකුරු, ඉලක්කම්, සංකේත පරිගණකයට ඇතුල් කිරීමට භාවිතා කරන උපකරණය කුමක්ද?",
+        correct: "යතුරු පුවරුව (Keyboard).",
+        distractors: [
+                "මූසිකය (Mouse).",
+                "ස්කෑනරය (Scanner).",
+                "ජොයිස්ටික් (Joystick)."
+        ]
+    },
+    // Q27  
+    {
+        question: "පරිගණකයේ දත්ත _____ කළ හැකිවීම එහි ප්‍රධාන ලක්ෂණයකි. (හිස්තැනට ගැලපෙන වචනය තෝරන්න)",
+        correct: "ආදානය",
+        distractors: [
+                "දත්ත මැකීම",
+                "QR ස්කෑන්",
+                "මෘද්‍රණය කිරීම"
+        ]
+    },
+    // Q28
+    {
+        question: "පද්ධති ඒකකය (System Unit) තුල ඇති ප්‍රධාන සංරචකයක් නම් කරන්න.",
+        correct: "මව් පුවරුව (Motherboard)",
+        distractors: [
+                "සංදර්ශකය (Monitor) පමණි.",
+                "සංගත තැටිය (CD)",
+                "ජව සැපයුම (UPS)."
+        ]
+    },
+    // Q29
+    {
+        question: "CPU යන්නෙහි සිංහල තේරුම කුමක්ද?",
+        correct: "මධ්‍ය සැකසුම් ඒකකය (Central Processing Unit).",
+        distractors: [
+                "ප්‍රධාන සැකසුම් ඒකකය (Main Processing Unit).",
+                "ක්‍රියාකාරී ඒකකය (Action Unit).",
+                "දත්ත පාලන ඒකකය (Data Control Unit)."
+        ]
+    },
+    // Q30
+    {
+        question: "Ai යන්නෙහි පූර්ණ ස්වරූපය කුමක්ද?",
+        correct: "කෘත්‍රිම බුද්ධිය (Artificial Intelligence).",
+        distractors: [
+                "කෘත්‍රිම තොරතුරු (Artificial Information).",
+                "ක්‍රියාකාරී බුද්ධිය (Active Intelligence).",
+                "පුද්ගල බුද්ධිය (Personal Intelligence)."
+        ]
+    },
+    // Q31
+    {
+        question: "කෘත්‍රිම බුද්ධිය (Ai) යනු කුමක්ද?",
+        correct: "මිනිස් මොළයේ චින්තන ක්‍රියාවලිය අනුකරණය කරමින්, ස්වයං-සිතීමේ හා ඉගෙනීමේ හැකියාව ඇති පරිගණක වැඩසටහනකි.",
+        distractors: [
+                "මිනිස් මොළයේ චින්තන ක්‍රියාවලිය අනුකරණය කරමින් දත්ත ගබඩා කිරීමේ හැකියාව ඇති වැඩසටහනකි.",
+                "ඉගෙනීමේ හැකියාව ඇති දෘඩාංග කොටසකි.",
+                "කිසියම් තොරතුරක් තාක්ෂණය ඔස්සේ ගබඩා කිරීම සහ සන්නිවේදනය කිරීම."
+        ]
+    },
+    // Q32
+    {
+        question: "ICT ඉගෙනීමේ ප්‍රයෝජනයක් නම් කරන්න.",
+        correct: "අනාගත රැකියා අවස්ථා සඳහා.",
+        distractors: [
+                "විනෝදාස්වාදය සඳහා පමණි.",
+                "අධ්‍යාපනය සඳහා පමණක් අවශ්‍ය වේ.",
+                "ගීත ඇසීමට සහ විවේක කාලයේදී youtube යාමට"
+        ]
+    },
+    // Q33
+    {
+        question: "ICT භාවිතා කරන ක්ෂේත්‍රයකි",
+        correct: "වෛද්‍ය ක්ෂේත්‍රය",
+        distractors: [
+                "Zoom ක්ෂේත්‍රය",
+                "WhatsApp භාවිතයට",
+                "youtube ක්ෂේත්‍රය"
+        ]
+    },
+    // Q34 
+    {
+        question: "Process ලෙස හදුන්වන්නේ කුමක්ද?",
+        correct: "සැකසීම",
+        distractors: [
+                "ආදානය",
+                "ප්‍රතිදානය",
+                "ගබඩා කිරීම"
+        ]
+    },
+        // Q35 
+    {
+        question: " පරිගණකය shutdown කිරීමේදී පළමුවෙන් සිදු කළ යුත්තේ කුමක් ද? ",
+        correct: "පළමුවෙන්ම කිසියම් වැඩසටහනක් විවෘත කර තිබූයේ නම් එයින් ඉවත් විය යුතුය.",
+        distractors: [
+                "පළමුවෙන්ම Shutdown විධානය ක්ලික් කිරීම",
+                "පළමුවෙන්ම ප්‍රතිදානය කලයුතුය",
+                "වැඩසටහනක් විවෘත කර තබා off විධානය ක්ලික් කිරීම "
+        ]
+    },
+
+];
+
+    // Array Shuffle Function (Fisher-Yates) - ප්‍රශ්න සහ පිළිතුරු අහඹු ලෙස පෙළගැස්වීම සඳහා
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            // Correct destructuring swap
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Handles the quiz when the time for a question runs out
+    function handleTimeout() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+        if (isQuestionLocked) return; 
+        isQuestionLocked = true;
+
+        const optionsList = document.getElementById('options-list');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const nextButton = document.getElementById('next-button');
+        const currentQ = quizData[currentQuestionIndex];
+        
+        // Show the correct answer (color it green)
+        if (optionsList) {
+            Array.from(optionsList.children).forEach(button => {
+                const answer = button.getAttribute('data-answer');
+                if (answer === currentQ.correct) {
+                    button.classList.add('correct-answer');
+                } else {
+                    button.classList.add('disabled', 'opacity-50');
+                }
+            });
+        }
+        
+        // Show feedback message for timeout
+        if (feedbackMessage) {
+            feedbackMessage.textContent = 'කාලය අවසන්! පිළිතුරක් තේරුවේ නැත. (Time\'s up! No answer selected.)';
+            feedbackMessage.classList.remove('hidden', 'text-lime-600');
+            feedbackMessage.classList.add('text-red-500');
+        }
+        
+        // Enable Next button
+        if (nextButton) {
+            nextButton.disabled = false;
+            nextButton.classList.remove('bg-gray-400', 'disabled');
+            nextButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }
+    }
+
+    // Starts the timer for the current question
+    function startTimer() {
+        // Clear any existing timer
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        timeRemaining = TIME_LIMIT;
+        const timeLeftElement = document.getElementById('time-left');
+        const timerProgressElement = document.getElementById('timer-progress');
+
+        // Update display immediately and set bar to 100%
+        if (timeLeftElement) timeLeftElement.textContent = timeRemaining;
+        if (timerProgressElement) {
+            timerProgressElement.style.width = '100%';
+            timerProgressElement.classList.remove('bg-red-700');
+            timerProgressElement.classList.add('bg-red-500');
+        }
+        
+        // Start countdown
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+
+            // Update time display
+            if (timeLeftElement) timeLeftElement.textContent = timeRemaining;
+            
+            // Update progress bar
+            const progress = (timeRemaining / TIME_LIMIT) * 100;
+            if (timerProgressElement) timerProgressElement.style.width = `${progress}%`;
+
+            // Change bar color when time is low
+            if (timeRemaining <= 5 && timerProgressElement) {
+                // Flash effect for low time (optional)
+                timerProgressElement.classList.toggle('bg-red-700');
+            }
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                handleTimeout();
+            }
+        }, 1000);
+    }
+
+    // ප්‍රශ්නය සහ පිළිතුරු විදැහුම් කිරීමේ කාර්යය
+    function renderQuestion() {
+        if (currentQuestionIndex >= quizData.length) {
+            showResults();
+            return;
+        }
+
+        isQuestionLocked = false;
+        const currentQ = quizData[currentQuestionIndex];
+        
+        // නිවැරදි පිළිතුර සහ වැරදි පිළිතුරු එකතු කර අහඹු ලෙස පෙළගැස්වීම
+        // distractors.slice(0, 3) මඟින් නිවැරදි පිළිතුරට අමතරව වැරදි පිළිතුරු 3ක් (මුළු පිළිතුරු 4ක්) තෝරා ගනී.
+        const options = shuffleArray([
+            currentQ.correct, 
+            ...currentQ.distractors.slice(0, 3) 
+        ]);
+
+        const totalQuestions = quizData.length; // මුළු ප්‍රශ්න ගණන (10)
+        const questionNumber = currentQuestionIndex + 1;
+        
+
+        quizContainer.innerHTML = `
+            <div class="mb-4"> <!-- Reduced margin -->
+                <!-- Reduced text size from text-lg to text-base -->
+                <p class="text-base font-semibold text-cyan-700 mb-2">ප්‍රශ්නය ${questionNumber} / ${totalQuestions}</p>
+                <!-- Reduced text size from text-xl to text-lg -->
+                <h2 class="question-text text-lg font-bold text-gray-700">${currentQ.question}</h2>
+            </div>
+            <div id="options-list" class="space-y-2"> <!-- Reduced space -->
+                ${options.map((option, index) => `
+                    <button 
+                        class="option-button w-full text-left p-3 border border-gray-300 rounded-lg text-gray-700 shadow-sm transition duration-150 ease-in-out bg-gray-50 text-base"
+                        data-answer="${option}"
+                        onclick="checkAnswer(this, '${currentQ.correct.replace(/'/g, "\\'")}')"
+                    >
+                        ${option}
+                    </button>
+                `).join('')}
+            </div>
+            <div id="feedback-message" class="mt-3 text-center text-sm font-medium hidden"></div> <!-- Reduced margin -->
+            <button id="next-button" onclick="nextQuestion()" class="mt-4 w-full bg-gray-400 text-white py-2.5 rounded-lg disabled transition duration-300" disabled> <!-- Reduced margin and padding -->
+                ඊළඟ ප්‍රශ්නය (Next Question)
+            </button>
+        `;
+        
+        // Start the timer for the new question
+        startTimer();
+    }
+
+    // පිළිතුර පරීක්ෂා කිරීමේ කාර්යය
+    function checkAnswer(selectedButton, correctAnswer) {
+        if (isQuestionLocked) return;
+        
+        // Stop the timer immediately
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        isQuestionLocked = true;
+
+        const selectedAnswer = selectedButton.getAttribute('data-answer');
+        const optionsList = document.getElementById('options-list').children;
+        const feedbackMessage = document.getElementById('feedback-message');
+        const nextButton = document.getElementById('next-button');
+        let isCorrect = false;
+
+        // සියලුම බොත්තම් disable කිරීම
+        Array.from(optionsList).forEach(button => {
+            button.classList.add('disabled');
+        });
+        
+        // නිවැරදි පිළිතුර සොයාගෙන වර්ණ ගැන්වීම
+        Array.from(optionsList).forEach(button => {
+            const answer = button.getAttribute('data-answer');
+            if (answer === correctAnswer) {
+                button.classList.add('correct-answer');
+                if (button === selectedButton) {
+                    isCorrect = true;
+                }
+            }
+        });
+
+        if (isCorrect) {
+            score++;
+            selectedButton.classList.add('correct-answer'); // කොළ පාට
+            feedbackMessage.textContent = 'නිවැරදියි! (Correct!)';
+            feedbackMessage.classList.remove('text-red-500', 'hidden');
+            feedbackMessage.classList.add('text-lime-600');
+        } else {
+            selectedButton.classList.add('incorrect-answer'); // රතු පාට
+            feedbackMessage.textContent = 'වැරදියි! නිවැරදි පිළිතුර කොළ පැහැයෙන් දක්වා ඇත. (Incorrect!)';
+            feedbackMessage.classList.remove('text-lime-600', 'hidden');
+            feedbackMessage.classList.add('text-red-500');
+        }
+
+        // Next බොත්තම සක්‍රිය කිරීම
+        nextButton.disabled = false;
+        nextButton.classList.remove('bg-gray-400', 'disabled');
+        nextButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+    }
+
+    // ඊළඟ ප්‍රශ්නයට යාමේ කාර්යය
+    function nextQuestion() {
+        currentQuestionIndex++;
+        renderQuestion();
+    }
+
+    // ප්‍රතිඵල රූපයක් ලෙස බාගත කිරීමේ කාර්යය
+    function captureResultsAsImage() {
+        const card = document.getElementById('result-card-to-capture');
+        
+        // Use html2canvas to capture the content
+        html2canvas(card, {
+            scale: 2, // Increase scale for higher resolution
+            allowTaint: true, 
+            useCORS: true 
+        }).then(canvas => {
+            // Convert canvas to JPEG Data URL
+            const imageUrl = canvas.toDataURL('image/jpeg', 0.9); // 0.9 quality
+            
+            // Create a temporary link element for download
+            const link = document.createElement('a');
+            const date = new Date().toLocaleDateString('si-LK');
+            link.download = `ICT_Quiz_Scorecard_${studentName}_${date}.jpeg`; // Updated filename
+            link.href = imageUrl;
+            
+            // Trigger the download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }).catch(error => {
+            console.error('HTML to Canvas conversion failed:', error);
+            // Error handling
+        });
+    }
+
+    // ප්‍රතිඵල පෙන්වීමේ කාර්යය
+    function showResults() {
+        // Clear the timer when results are shown
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+        timerDisplay.classList.add('hidden'); // Hide timer on results page
+        quizContainer.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+        
+        const correctAnswersCountElement = document.getElementById('correct-answers-count');
+        const finalPercentageElement = document.getElementById('final-percentage');
+        
+        // NEW: Set student name and class in the result card
+        document.getElementById('display-student-name').textContent = studentName || 'අනාවරණය කර නැත';
+        document.getElementById('display-student-class').textContent = studentClass || 'අනාවරණය කර නැත';
+
+        const totalQuestions = quizData.length; // මුළු ප්‍රශ්න ගණන (10)
+        const percentage = Math.round((score / totalQuestions) * 100);
+        
+        // Update the detailed score elements
+        correctAnswersCountElement.textContent = ` නිවැරදි පිළිතුරු: ${score} / ${totalQuestions}`;
+        finalPercentageElement.textContent = `ලකුණු: ${percentage}%`;
+
+        // Reset and set color class based on percentage for the percentage display
+        finalPercentageElement.classList.remove('text-red-500', 'text-orange-500', 'text-lime-600', 'text-gray-700');
+
+        // ලකුණු අනුව වර්ණය තීරණය කිරීම (Color determination based on score)
+        if (percentage >= 70) {
+            finalPercentageElement.classList.add('text-lime-600');
+        } else if (percentage >= 40) {
+            finalPercentageElement.classList.add('text-orange-500');
+        } else {
+            finalPercentageElement.classList.add('text-red-500');
+        }
+        
+        // Update date/time for the captured card
+        const date = new Date().toLocaleDateString('si-LK');
+        const time = new Date().toLocaleTimeString('si-LK', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('result-date').textContent = `දිනය සහ වේලාව: ${date} | ${time}`;
+    }
+    
+    // --- Reset Quiz State and Show Start Screen ---
+    function resetQuizState() {
+        // Stop any running timer
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+        
+        // Reset state variables
+        currentQuestionIndex = 0;
+        score = 0;
+        isQuestionLocked = false;
+        timeRemaining = TIME_LIMIT;
+        
+        // NEW: Clear student info and reset input fields
+        studentName = '';
+        studentClass = '';
+        const nameInput = document.getElementById('student-name');
+        const classInput = document.getElementById('student-class');
+        if (nameInput) nameInput.value = '';
+        if (classInput) classInput.value = '';
+        document.getElementById('validation-message').classList.add('hidden');
+
+        // Show the Start Screen and hide quiz/results/timer
+        startScreen.classList.remove('hidden');
+        quizContainer.classList.add('hidden');
+        resultsContainer.classList.add('hidden');
+        timerDisplay.classList.add('hidden');
+        
+        // Ensure modal is also hidden and animation class removed
+        instructionModal.classList.add('hidden');
+        modalContent.classList.remove('modal-enter-animation');
+    }
+
+    // ප්‍රශ්නාවලිය ආරම්භ කිරීමේ/නැවත ආරම්භ කිරීමේ කාර්යය
+    function startQuiz() {
+        // Validation is now handled in validateAndStartQuiz()
+        
+        // Reset the state to ensure a clean start, but keep the start screen hidden for now
+        
+        startScreen.classList.add('hidden'); // Hide the start screen explicitly
+        
+        // ප්‍රශ්නාවලිය ආරම්භ කිරීමට පෙර ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීම
+        // Conditionally shuffle the questions based on the SHUFFLE_QUESTIONS constant
+        if (SHUFFLE_QUESTIONS) { 
+            shuffleArray(quizData); 
+        }
+        
+        // Transition from Start Screen to Quiz Container
+        quizContainer.classList.remove('hidden');
+        timerDisplay.classList.remove('hidden');
+        
+        // Render the first question (Question 1)
+        renderQuestion();
+    }
+    
+    // --- 4. TAB CHANGE / WINDOW BLUR DETECTION (වෙනත් Tab එකකට ගියහොත් Reset කිරීම) ---
+    document.addEventListener("visibilitychange", function() {
+        // යළි පිහිටුවීම සක්‍රීය නොවේ නම්, ක්‍රියාත්මක වීම නවත්වන්න
+        if (!AUTO_RESET_ON_TAB_SWITCH) { 
+            console.log("Auto reset on tab switch is disabled.");
+            return; 
+        }
+
+        // When the document is hidden (user switched to another tab/window)
+        if (document.hidden) {
+            // Only reset if the start screen is hidden, meaning the quiz is currently running or showing results
+            if (startScreen.classList.contains('hidden')) {
+                 resetQuizState();
+            }
+        }
+    });
+
+</script>
+
+</body>
+</html>
