@@ -289,55 +289,10 @@
                 </div>
             </div>
 
-            <!-- Setting 2: Quiz Length -->
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-quiz-length" class="text-sm font-medium text-gray-700">Total Questions:</label>
-                <div>
-                    <input type="number" id="setting-quiz-length" min="1" max="35" value="5" 
-                           class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
-                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (MAX: 35)</span>
-                </div>
-            </div>
-
-            <!-- Setting 3: Time Limit -->
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-time-limit" class="text-sm font-medium text-gray-700">Time Limit per Q:</label>
-                <div>
-                    <input type="number" id="setting-time-limit" min="10" max="120" value="30" 
-                           class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
-                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (Seconds)</span>
-                </div>
-            </div>
-
-            <!-- Setting 4: Shuffle Questions -->
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-shuffle" class="text-sm font-medium text-gray-700">Shuffle Questions:</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="setting-shuffle" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <!-- Setting 5: Auto Reset on Tab Switch -->
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-auto-reset" class="text-sm font-medium text-gray-700">Auto Reset on Tab Switch:</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="setting-auto-reset" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
+            
             
         </div>
         
-        <!-- Save Settings Button -->
-        <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg mt-4 text-sm font-semibold">
-            Save Settings
-        </button>
-        
-        <!-- Reset Global Lock Button (Now resets the attempt counter) -->
-        <button onclick="confirmAndResetDeviceAttempts()" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300 shadow-lg mt-2 text-sm font-semibold">
-            🚨 Reset Device Attempts
-        </button>
 
     </div>
 </div>
@@ -387,9 +342,9 @@
     
     // Default settings (ආරම්භක සැකසුම්)
     const DEFAULT_SETTINGS = {
-        maxAttempts: 33,                 // NEW: Max attempts per device (පරිගණකයකට උපරිම උත්සාහයන්)
-        quizLength: 33,                  
-        timeLimit: 33,                  
+        maxAttempts: 2,                 // NEW: Max attempts per device (පරිගණකයකට උපරිම උත්සාහයන්)
+        quizLength: 35,                  
+        timeLimit: 40,                  
         shuffleQuestions: true,         
         autoResetOnTabSwitch: true      
     };
