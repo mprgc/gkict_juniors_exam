@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GK ICT Junior Starter Exam Portal</title>
-    <!-- Include Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>GK ICT Exam Portal</title>
+    <!-- Include Tailwind CSS via CDN --><script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Background Image Styles - Carried over from LMS Login */
         body {
@@ -36,7 +35,7 @@
             background-position: inherit;
             background-attachment: inherit;
             filter: blur(8px); 
-            background-color: rgba(0, 0, 0, 0.4); /* Darker overlay for better contrast */
+            background-color: rgba(0, 0, 0, 0.2); 
             z-index: -1; 
         }
 
@@ -69,13 +68,11 @@
 </head>
 <body class="p-4">
 
-    <!-- Auth Container -->
-    <div id="authContainer" class="w-full max-w-sm rounded-xl shadow-2xl p-5 md:p-6 mb-8">
+    <!-- Auth Container --><div id="authContainer" class="w-full max-w-sm rounded-xl shadow-2xl p-5 md:p-6 mb-8">
         
-        <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">GK ICT Exam Portal Login</h2>
+        <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">GK ICT Exam Portal Login📝</h2>
 
-        <!-- Form and Message Container -->
-        <form id="authForm" class="space-y-4">
+        <!-- Form and Message Container --><form id="authForm" class="space-y-4">
             
             <!-- Exam Code Input (Formerly Access Code) -->
             <div class="space-y-1">
@@ -83,25 +80,22 @@
                 <input type="text" id="authAccessCode" placeholder="Enter Exam Code" required
                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base" />
             </div>
+
+            <!-- Password Input - REMOVED -->
             
-            <!-- Submit Button (Login) -->
-            <button type="submit" id="authSubmit"
-                    class="w-full py-2.5 mt-4 text-white font-semibold rounded-lg transition-colors duration-300 focus:outline-none focus:ring-4 
-                           bg-green-600 hover:bg-green-700 focus:ring-green-300">
+            <!-- Forgot Password Link Container - REMOVED -->
+
+            <!-- Submit Button (Login) --><button type="submit" id="authSubmit"
+                    class="w-full py-2.5 mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-green-300">
                 Login
             </button>
             
-            <!-- Login Status and Clear Button Container (NEWLY ADDED) -->
-            <div id="statusContainer" class="mt-4 p-3 bg-blue-50 rounded-lg text-center border border-blue-200">
-                <p id="attemptStatus" class="text-sm font-medium text-blue-700 mb-2">Loading...</p>
-                <button type="button" id="clearCountBtn"
-                        class="w-full px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-red-300 mt-2">
-                    Clear Login Count (ගණන ඉවත් කරන්න)
-                </button>
+            <!-- Clear Buttons Container - REMOVED. Only placeholder for unregistered users remains. -->
+            <div class="mt-2 text-center">
+                 <p class="text-xs text-gray-500 mt-2">Please contact your ICT Instructor for get a New Exam Code.</p>
             </div>
 
-            <!-- Message Area (Used by JS: setMsg) -->
-            <div id="authMessage" class="message text-center text-xs font-medium min-h-[20px] pt-1"></div>
+            <!-- Message Area (Used by JS: setMsg) --><div id="authMessage" class="message text-center text-xs font-medium min-h-[20px] pt-1"></div>
 
         </form>
     </div>
@@ -112,31 +106,36 @@
     </footer>
 
 
-    <!-- JavaScript Logic -->
-    <script>
-        // MASTER Exam Code - Only this code is required to log in
-        const MASTER_EXAM_CODE = "GK11111"; // Hardcoded value for comparison
+    <!-- Forgot Password Modal Structure - RETAINED BUT HIDDEN. (No button to open it) -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 opacity-0 modal-overlay hidden-strict">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 modal-content">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Password Reset Help (මුරපදය යළි සකසන්න)</h3>
+            <p id="modalMessage" class="text-sm text-gray-700 mb-6">
+                මුරපදය යළි සැකසීමට, කරුණාකර ඔබගේ පන්ති භාර ගුරුතුමා හෝ ආයතනය අමතන්න.
+            </p>
+            <div class="text-right">
+                <button id="closeModalBtn" class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    Got it (තේරුණා)
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // Current Exam Portal Version
+
+    <!-- JavaScript Logic --><script>
+
+
+        // MASTER Exam Code - Only this code is required to log in
+        const MASTER_EXAM_CODE = "#GK12345"; // Hardcoded value for comparison
+
+        // Current Exam Portal Version (No longer checked during login, but kept for metadata)
         const PORTAL_CURRENT_VERSION = "Exam Portal 1.0"; 
         
-        // --- LOCAL STORAGE KEYS & LIMIT (UPDATED/NEW) ---
-        const LOGIN_COUNT_KEY = 'GK_ICT_JUNIOR_EXAM'; // Required key for login limit tracking
-        const KEY_LOGGED = 'app_logged'; // Existing key, not strictly required for the new logic
-        const MAX_ATTEMPTS = 2; // Maximum allowed logins
+        // --- LOCAL STORAGE KEYS (Only KEY_LOGGED is functionally used) ---
+        const KEY_LOGGED = 'app_logged';
 
         // Exam Code Error Message
         const EXAM_CODE_ERROR_MSG = "Invalid Exam Code (වැරදි විභාග කේතය)"; 
-        
-        // --- NEW: Redirect URL එක මෙතැනින් වෙනස් කළ හැකිය (You can change the Redirect URL here) ---
-        const REDIRECT_URL = "ICT_Juniors_Exam.html"; 
-
-        // --- NEW: Class constants for visual state management ---
-        const ENABLED_COLOR_CLASSES = 'bg-green-600 hover:bg-green-700 focus:ring-green-300';
-        const DISABLED_COLOR_CLASSES = 'bg-gray-400 hover:bg-gray-400 focus:ring-gray-300 cursor-not-allowed';
-
-        // --- NEW: Toggle visibility of the Clear Count Button ---
-        const SHOW_CLEAR_COUNT_BUTTON = false; // Set this to 'false' to hide the button.
 
         //--------------------------------------
 
@@ -161,68 +160,11 @@
             const form = $id('authForm');
             const inputExamCode = $id('authAccessCode');
             const submitBtn = $id('authSubmit');
-            const footerCredit = $id('footerCredit');
-            // NEW Elements for the limit feature
-            const clearCountBtn = $id('clearCountBtn'); 
-            const attemptStatusEl = $id('attemptStatus'); 
-
-            // --- NEW Core Logic ---
-
-            function getLoginCount() {
-                // Retrieve count from localStorage, default to 0 if null/invalid
-                const count = parseInt(localStorage.getItem(LOGIN_COUNT_KEY), 10);
-                return isNaN(count) || count < 0 ? 0 : count;
-            }
-
-            function checkLoginLimit() {
-                const currentCount = getLoginCount();
-                const attemptsLeft = MAX_ATTEMPTS - currentCount;
-
-                if (currentCount >= MAX_ATTEMPTS) {
-                    // Disable button and show limit reached message
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'Login Limit Reached (සීමාව ඉක්මවා ඇත)';
-                    attemptStatusEl.textContent = `Login Attempts: ${currentCount} / ${MAX_ATTEMPTS} (සීමාවට පැමිණ ඇත)`;
-                    
-                    // NEW: Apply Gray/Disabled look
-                    submitBtn.classList.remove(...ENABLED_COLOR_CLASSES.split(' '));
-                    submitBtn.classList.add(...DISABLED_COLOR_CLASSES.split(' '));
-                    
-                    // If page loads with limit reached, display a warning
-                    if (currentCount === MAX_ATTEMPTS) {
-                         setMsg("You have reached the maximum login limit (උපරිම ලොග් වීමේ සීමාවට පැමිණ ඇත).", false);
-                    }
-                } else {
-                    // Enable button and show attempts left
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Login';
-                    attemptStatusEl.textContent = `පිවිසිය විය හැකි ගණන: ${attemptsLeft} / ${MAX_ATTEMPTS}`;
-                    setMsg(""); // Clear any previous error message on load
-                    
-                    // NEW: Apply Green/Enabled look
-                    submitBtn.classList.remove(...DISABLED_COLOR_CLASSES.split(' '));
-                    submitBtn.classList.add(...ENABLED_COLOR_CLASSES.split(' '));
-                }
-            }
             
-            /**
-             * සාර්ථක ලොග් වීමකින් පසු වෙනත් පිටුවකට යොමු කිරීම (Real Redirection).
-             * (Direct Redirection after successful login.)
-             */
-            function handleLoginSuccess(identifier) {
-                inputExamCode.value = '';
-                
-                // Redirection එක මෙතැනින් සිදු වේ. (The redirection happens here)
-                console.log(`Login successful using Exam Code: ${identifier}. Redirecting to ${REDIRECT_URL}...`);
-                
-                // මෙම කෝඩ් පේලිය මගින් ඔබගේ නව HTML පිටුවට යොමු කරයි.
-                window.location.href = REDIRECT_URL; 
-                
-                // සටහන: ඔබ මෙය Canvas/Sandbox පරිසරය තුල භාවිතා කරන්නේ නම්, 'Failed to set the 'href' property on 'Location''
-                // දෝෂයක් දැකිය හැක. නමුත් මෙය සැබෑ වෙබ් සර්වරයක නිවැරදිව ක්‍රියාත්මක වේ.
-            }
+            // Footer Element Reference
+            const footerCredit = $id('footerCredit');
 
-            // --- Event Listener for Form Submission ---
+            // --- Event Listener (Simplified) ---
             form.addEventListener('submit', async (ev)=>{
               ev.preventDefault();
               submitBtn.disabled = true;
@@ -230,14 +172,7 @@
 
               const enteredCode = inputExamCode.value.trim(); 
               
-              // 1. Check if the limit has already been reached before attempting login
-              if (getLoginCount() >= MAX_ATTEMPTS) {
-                  checkLoginLimit(); // Re-validate status
-                  setMsg("Login attempts exhausted (ලොග් වීමේ උත්සාහයන් අවසන්).", false);
-                  return;
-              }
-
-              // 2. Validate if Exam Code is entered
+              // 1. Validate if Exam Code is entered
               if(!enteredCode){ 
                 setMsg("Exam Code ඇතුළත් කරන්න.");
                 submitBtn.disabled = false;
@@ -245,107 +180,53 @@
                 return;
               }
 
-              // 3. Exam Code Validation
+              // 2. Exam Code Validation: Check input 'enteredCode' against the MASTER_EXAM_CODE
               if (MASTER_EXAM_CODE === enteredCode) { 
-                // 4. SUCCESS - INCREMENT LOGIN COUNT
-                let currentCount = getLoginCount();
-                currentCount++;
-                localStorage.setItem(LOGIN_COUNT_KEY, currentCount.toString());
-                
-                // localStorage.setItem(KEY_LOGGED, "true"); // Key from old code, keeping it here for reference but not strictly necessary
-                
-                // NOTE: Changed message to reflect loading, not redirection
+                localStorage.setItem(KEY_LOGGED, "true");
                 setMsg("Login successful! Redirecting to Exam Portal...", true);
                 
-                // Update the status display immediately
-                checkLoginLimit(); 
-                
-                // Transition to Exam UI state - onLoginSuccess වෙනුවට නිවැරදි function එක යෙදීම.
-                setTimeout(() => handleLoginSuccess(enteredCode), 500); 
+                // Pass the Exam Code as the identifier for the redirect function
+                setTimeout(() => onLoginSuccess(enteredCode), 500); 
               } else {
-                // FAIL - Only display error message if failed, do not increment count
                 setMsg(EXAM_CODE_ERROR_MSG);
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Login';
               }
             });
 
-            // --- Event Listener for Clear Button (NEWLY ADDED) ---
-            clearCountBtn.addEventListener('click', ()=>{
-                // Clear the count variable
-                localStorage.removeItem(LOGIN_COUNT_KEY);
-                
-                // Reset and check the new state
-                checkLoginLimit();
-                // Inform the user
-                setMsg("Login count cleared. You now have 2 attempts remaining (ලොග් වීමේ ගණන ඉවත් කරන ලදී).", true);
-            });
-
+            function onLoginSuccess(identifier){
+              inputExamCode.value = '';
+              $id('authContainer').classList.add('hidden-strict'); 
+              const REDIRECT_URL = "ICT_Juniors_Exam.html"; // Redirect to a new exam dashboard page
+              console.log(`Login successful using Exam Code: ${identifier}. Redirecting to ${REDIRECT_URL}...`);
+              window.location.href = REDIRECT_URL;
+            }
 
             function init(){
+              // REMOVED: inputExamCode.value = MASTER_EXAM_CODE; 
+              // The text box will now be empty on load.
               inputExamCode.value = '';
 
               // Set Footer Content
               if (footerCredit) {
-                  footerCredit.textContent = `Design by : Gayan Karunathilaka | GK ICT School | Exam Portal 2026 | ${PORTAL_CURRENT_VERSION}`;
+                  footerCredit.textContent = `Design by : Gayan Karunathilaka | GK ICT School Exam Portal 2025 | ${PORTAL_CURRENT_VERSION}`;
               }
               
-              // Remove the temporary class added during form submission
-              submitBtn.textContent = 'Login'; 
-
-              // NEW: Control visibility of the Clear Count button
-              if (!SHOW_CLEAR_COUNT_BUTTON) {
-                  clearCountBtn.classList.add('hidden-strict'); 
-              } else {
-                  clearCountBtn.classList.remove('hidden-strict');
-              }
-              
-              // --- NEW: INITIAL CHECK ---
-              checkLoginLimit();
+              submitBtn.textContent = 'Login';
+              submitBtn.disabled = false;
             }
             
             init();
 
         })();
-
-
-    // --- 2. F12, Ctrl/Cmd + Shortcuts PREVENTION (කෙටිමං අවහිර කිරීම) ---
-    document.addEventListener('keydown', function (e) {
-        // F12 key (e.key === 'F12' or e.keyCode === 123)
-        if (e.key === 'F12' || e.keyCode === 123) {
-            e.preventDefault();
-        }
-        
-        // Ctrl+Shift+I, Ctrl+Shift+J (Windows/Linux) - Developer Tools
-        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) {
-            e.preventDefault();
-        }
-        
-        // Ctrl+U (Windows/Linux) - View Source
-        if (e.ctrlKey && e.key === 'U') {
-            e.preventDefault();
-        }
-
-        // Cmd+Option+I (Mac) - Developer Tools
-        if (e.metaKey && e.altKey && e.key === 'I') {
-            e.preventDefault();
-        }
-        
-        // Cmd+Option+J (Mac) - Developer Tools
-        if (e.metaKey && e.altKey && e.key === 'J') {
-            e.preventDefault();
-        }
-    });
-
-    // --- 3. RIGHT CLICK AND LONG PRESS PREVENTION (Right Click සහ Long Press වැළැක්වීම) ---
-    document.addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-    });
-
     </script>
 
 </body>
+
 </html>
+
+
+
 
 
 
