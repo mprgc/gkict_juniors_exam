@@ -99,12 +99,12 @@
             object-fit: cover;
         }
         
-        /* Custom toggle switch style */
+        /* Custom toggle switch style - ADJUSTED FOR SMALLER MOBILE UI */
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 48px;
-            height: 24px;
+            width: 40px; /* Reduced from 48px */
+            height: 20px; /* Reduced from 24px */
         }
 
         .toggle-switch input {
@@ -122,16 +122,16 @@
             bottom: 0;
             background-color: #ccc;
             transition: .4s;
-            border-radius: 24px;
+            border-radius: 20px; /* Adjusted radius */
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
+            height: 16px; /* Reduced from 18px */
+            width: 16px; /* Reduced from 18px */
+            left: 2px; /* Adjusted padding */
+            bottom: 2px; /* Adjusted padding */
             background-color: white;
             transition: .4s;
             border-radius: 50%;
@@ -142,7 +142,7 @@
         }
 
         input:checked + .slider:before {
-            transform: translateX(24px);
+            transform: translateX(20px); /* Adjusted translation (40px width - 4px padding - 16px circle = 20px) */
         }
     </style>
 </head>
@@ -206,7 +206,7 @@
         <!-- Result Card to be captured by html2canvas -->
         <div id="result-card-to-capture" class="p-5 rounded-lg mb-4 shadow-xl"> 
             <img 
-                src="https://placehold.co/64x64/00bcd4/ffffff?text=GK" 
+                src="01.png" 
                 alt="GK ICT Logo Placeholder" 
                 class="logo-placeholder w-16 h-16 mx-auto mb-3"
             >
@@ -263,47 +263,47 @@
     </div>
 </div>
 
-<!-- 6. SETTINGS MODAL (සැකසුම් මෙනුව) - UPDATED FOR MOBILE -->
+<!-- 6. SETTINGS MODAL (සැකසුම් මෙනුව) -->
 <div id="settings-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden">
-    <!-- !!! මානයන් මෙහිදී වෙනස් කර ඇත: p-4, m-3, max-w-xs, max-h-[80vh] !!! -->
+    <!-- Modal container is now max-w-xs and max-h-[80vh] for better mobile fit -->
     <div id="settings-modal-content" class="bg-white rounded-xl shadow-2xl p-4 m-3 w-full max-w-xs sm:max-w-sm max-h-[80vh] overflow-y-auto">
         <h3 class="text-xl font-bold text-yellow-700 mb-4 border-b pb-1.5">⚙️ ප්‍රශ්නාවලියේ සැකසුම් (Admin)</h3>
         
         <div class="space-y-3">
             
-            <!-- Setting 1: Max Attempts (NEW SETTING) -->
+            <!-- Setting 1: Max Attempts -->
             <div class="flex justify-between items-center p-2 bg-red-50 rounded-lg border border-red-200">
-                <label for="setting-max-attempts" class="text-sm font-medium text-red-700">උපරිම උත්සාහයන් (Max Attempts per Device):</label>
+                <label for="setting-max-attempts" class="text-sm font-medium text-red-700">Max Attempts per Device:</label>
                 <div>
                     <input type="number" id="setting-max-attempts" min="1" max="10" value="3" 
                            class="w-16 p-1 border border-red-300 rounded-lg text-center text-sm font-bold text-red-700 focus:ring-red-500">
-                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (පරිගණකයකට)</span>
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (Attempts)</span>
                 </div>
             </div>
 
             <!-- Setting 2: Quiz Length -->
             <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-quiz-length" class="text-sm font-medium text-gray-700">ප්‍රශ්න ගණන (Total Questions):</label>
+                <label for="setting-quiz-length" class="text-sm font-medium text-gray-700">Total Questions:</label>
                 <div>
                     <input type="number" id="setting-quiz-length" min="1" max="35" value="5" 
                            class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
-                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (උපරිම: 35)</span>
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (MAX: 35)</span>
                 </div>
             </div>
 
             <!-- Setting 3: Time Limit -->
             <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-time-limit" class="text-sm font-medium text-gray-700">කාල සීමාව (Time Limit per Q):</label>
+                <label for="setting-time-limit" class="text-sm font-medium text-gray-700">Time Limit per Q:</label>
                 <div>
                     <input type="number" id="setting-time-limit" min="10" max="120" value="30" 
                            class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
-                    <span class="text-xs text-gray-500 block text-right mt-0.5"> තත්පර (Seconds)</span>
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (Seconds)</span>
                 </div>
             </div>
 
             <!-- Setting 4: Shuffle Questions -->
             <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-shuffle" class="text-sm font-medium text-gray-700">ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීම (Shuffle Questions):</label>
+                <label for="setting-shuffle" class="text-sm font-medium text-gray-700">Shuffle Questions:</label>
                 <label class="toggle-switch">
                     <input type="checkbox" id="setting-shuffle" checked>
                     <span class="slider"></span>
@@ -312,7 +312,7 @@
 
             <!-- Setting 5: Auto Reset on Tab Switch -->
             <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
-                <label for="setting-auto-reset" class="text-sm font-medium text-gray-700">ටැබ් මාරු කළ විට යළි පිහිටුවීම (Auto Reset on Tab Switch):</label>
+                <label for="setting-auto-reset" class="text-sm font-medium text-gray-700">Auto Reset on Tab Switch:</label>
                 <label class="toggle-switch">
                     <input type="checkbox" id="setting-auto-reset" checked>
                     <span class="slider"></span>
@@ -323,12 +323,12 @@
         
         <!-- Save Settings Button -->
         <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg mt-4 text-sm font-semibold">
-            සැකසුම් සුරකින්න (Save Settings)
+            Save Settings
         </button>
         
         <!-- Reset Global Lock Button (Now resets the attempt counter) -->
         <button onclick="confirmAndResetDeviceAttempts()" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300 shadow-lg mt-2 text-sm font-semibold">
-            🚨 මෙම පරිගණකයේ උත්සාහයන් Reset කරන්න (Reset Device Attempts)
+            🚨 Reset Device Attempts
         </button>
 
     </div>
@@ -379,9 +379,9 @@
     
     // Default settings (ආරම්භක සැකසුම්)
     const DEFAULT_SETTINGS = {
-        maxAttempts: 3,                 // NEW: Max attempts per device (පරිගණකයකට උපරිම උත්සාහයන්)
-        quizLength: 5,                  
-        timeLimit: 30,                  
+        maxAttempts: 2,                 // NEW: Max attempts per device (පරිගණකයකට උපරිම උත්සාහයන්)
+        quizLength: 35,                  
+        timeLimit: 40,                  
         shuffleQuestions: true,         
         autoResetOnTabSwitch: true      
     };
@@ -490,7 +490,7 @@
             startQuizButton.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'transform', 'hover:scale-[1.01]');
             // ------------------------------------------
 
-            attemptMessage.textContent = `🚫 මෙම පරිගණකය භාවිතයෙන් උපරිම උත්සාහයන් (${maxAttempts}) සම්පූර්ණ කර ඇත. නැවත උත්සාහ කළ නොහැක.`;
+            attemptMessage.textContent = `🚫 මෙම විභාගය උපරිම උත්සාහයන් (${maxAttempts}) සම්පූර්ණ කර ඇත. නැවත උත්සාහ කළ නොහැක.`;
             attemptMessage.classList.remove('text-blue-600');
             attemptMessage.classList.add('text-red-600');
             return true; // Lock is active
