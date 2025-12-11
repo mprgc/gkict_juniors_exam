@@ -20,8 +20,8 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            min-height: 100vh;
-            padding: 15px; /* Reduced overall padding */
+            min-height: 10vh;
+            padding: 15px;
             box-sizing: border-box;
             
             /* --- COPY PREVENTION (පාඨ පිටපත් කිරීම වැළැක්වීම) --- */
@@ -31,30 +31,30 @@
             user-select: none; 
         }
         .quiz-card {
-            max-width: 550px; /* Reduced max width slightly */
+            max-width: 550px;
             width: 100%;
             background-color: white;
-            padding: 1.25rem; /* Reduced padding */
-            border-radius: 0.75rem; /* Slightly smaller border radius */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 15px;
         }
         
         @media (max-width: 640px) {
             /* Responsive adjustments for mobile font sizes */
             .quiz-card h1 {
-                font-size: 1.35rem; /* Slightly smaller main title on mobile */
+                font-size: 1.35rem;
             }
             .question-text {
-                font-size: 1.0rem; /* Smaller question text on mobile */
+                font-size: 1.0rem;
             }
         }
 
         .option-button {
             transition: all 0.2s ease-in-out;
             cursor: pointer;
-            padding: 0.75rem; /* Reduced option button padding */
-            font-size: 1.0rem; /* Kept option text size reasonable */
+            padding: 0.75rem;
+            font-size: 1.0rem;
         }
         .option-button:hover:not(.disabled) {
             background-color: #e0f2f1; /* Light cyan on hover */
@@ -89,66 +89,110 @@
             animation: modalFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         
-        /* Styles for the Capture Card (Made smaller and more compact) */
+        /* Styles for the Capture Card */
         #result-card-to-capture {
-            background-color: #e0f7fa; /* Light cyan background for the certificate look */
-            border: 3px solid #00bcd4; /* Slightly thinner border */
+            background-color: #e0f7fa;
+            border: 3px solid #00bcd4;
         }
         .logo-placeholder {
             border-radius: 50%;
             object-fit: cover;
+        }
+        
+        /* Custom toggle switch style */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4f46e5; /* Indigo 600 */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
         }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
-    <!-- Reduced H1 size from text-3xl to text-2xl -->
     <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">ICT Junior Starter Final Exam 2025 </h1>
-    <!-- Reduced text size from text-md to text-sm -->
     <p class="text-center text-sm text-blue-700 mb-6 font-semibold">GK ICT School අපි විභාග ලියන අලුත් විදිහ.</p>
 
     <!-- 1. START SCREEN -->
-    <!-- Reduced padding and shadow -->
     <div id="start-screen" class="text-center p-5 bg-blue-50 rounded-lg shadow"> 
-        <!-- Reduced H2 size from text-2xl to text-xl -->
         <h2 class="text-xl font-extrabold mb-4 text-blue-800">ප්‍රශ්නාවලිය ආරම්භ කිරීමට සූදානම්ද?</h2>
         
         <!-- Student Name Input -->
         <div class="mb-3 text-left">
-            <!-- Reduced label size from text-sm to text-xs -->
             <label for="student-name" class="block text-xs font-medium text-gray-700 mb-1">ශිෂ්‍යයාගේ නම (Student Name):</label>
-            <!-- Reduced input padding from p-3 to p-2.5 -->
             <input type="text" id="student-name" placeholder="ඔබේ සම්පුර්ණ නම " class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
         </div>
         <!-- Student Class Input -->
         <div class="mb-4 text-left">
-            <!-- Reduced label size from text-sm to text-xs -->
             <label for="student-class" class="block text-xs font-medium text-gray-700 mb-1">පන්තිය (Class):</label>
-            <!-- Reduced input padding from p-3 to p-2.5 -->
             <input type="text" id="student-class" placeholder="උදා: 10 වසර සජීවා පන්තිය" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
         </div>
         
-        <!-- Reduced button padding and text size -->
-        <button onclick="showInstructions()" class="w-full bg-gray-200 text-gray-700 py-1 text-sm rounded-lg hover:bg-gray-300 transition duration-300 mb-3 shadow-sm">
-            උපදෙස් කියවන්න (Read Instructions)
-        </button>
+        <!-- Settings and Instructions Row -->
+        <div class="flex space-x-2 mb-3">
+            <button onclick="openSettings()" class="flex-1 bg-yellow-400 text-gray-800 py-1 text-sm rounded-lg hover:bg-yellow-500 transition duration-300 shadow-sm font-semibold">
+                සැකසුම් (Settings)
+            </button>
+            <button onclick="showInstructions()" class="flex-1 bg-gray-200 text-gray-700 py-1 text-sm rounded-lg hover:bg-gray-300 transition duration-300 shadow-sm">
+                උපදෙස් කියවන්න
+            </button>
+        </div>
         
-        <!-- Reduced button padding and text size from text-2xl to text-xl -->
-        <button onclick="validateAndStartQuiz()" class="w-full bg-blue-600 text-white py-3 text-xl rounded-lg hover:bg-blue-700 transition duration-300 shadow-lg transform hover:scale-[1.01]">
+        <!-- Start Quiz Button -->
+        <button id="start-quiz-button" onclick="validateAndStartQuiz()" class="w-full bg-blue-600 text-white py-3 text-xl rounded-lg hover:bg-blue-700 transition duration-300 shadow-lg transform hover:scale-[1.01]">
             Start Quiz
         </button>
-        <!-- Reduced validation message size from text-sm to text-xs -->
         <p id="validation-message" class="text-red-600 mt-2 text-xs font-semibold hidden">නම සහ පන්තිය ඇතුළත් කිරීම අනිවාර්යයි! (Name and Class are required!)</p>
+        
+        <!-- Global Lock/Attempt Message -->
+        <p id="attempt-message" class="mt-2 text-sm font-semibold"></p>
     </div>
 
     <!-- 2. TIMER DISPLAY -->
     <div id="timer-display" class="mb-3 text-center hidden">
-        <div id="timer-bar" class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"> <!-- Reduced height -->
+        <div id="timer-bar" class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
             <div id="timer-progress" class="h-1.5 bg-red-500 transition-all duration-1000 ease-linear" style="width: 100%;"></div>
         </div>
-        <!-- Reduced text size from text-sm to text-xs -->
-        <p class="mt-1 text-xs text-gray-600 font-medium"><span id="time-left">40</span> තත්පර ඉතිරිව ඇත (Time Left)</p>
+        <p class="mt-1 text-xs text-gray-600 font-medium"><span id="time-left"></span> තත්පර ඉතිරිව ඇත (Time Left)</p>
     </div>
     
     <!-- 3. QUIZ CONTAINER -->
@@ -160,64 +204,51 @@
     <div id="results-container" class="hidden">
         
         <!-- Result Card to be captured by html2canvas -->
-        <!-- Reduced padding from p-8 to p-5 -->
         <div id="result-card-to-capture" class="p-5 rounded-lg mb-4 shadow-xl"> 
-            <!-- Corrected image path: Replaced local '01.png' with a placeholder image URL -->
             <img 
-                src="01.png" 
-                alt="GK ICT Logo" 
+                src="https://placehold.co/64x64/00bcd4/ffffff?text=GK" 
+                alt="GK ICT Logo Placeholder" 
                 class="logo-placeholder w-16 h-16 mx-auto mb-3"
             >
-            <!-- Reduced H2 size from text-3xl to text-2xl -->
             <h2 class="text-2xl font-extrabold text-center mb-1 text-blue-900">ප්‍රශ්නාවලියේ අවසන් ප්‍රතිඵලය</h2>
-            <!-- Reduced text size from text-lg to text-base, border-b padding reduced -->
             <p class="text-center text-base text-gray-700 mb-4 border-b pb-3 border-blue-400"> GK ICT Juniors Exam 2025</p>
             
             <!-- Student Info Display on Result Card -->
             <div class="mb-4 text-center">
-                <!-- Reduced text size from text-xl to text-lg -->
                 <p class="text-lg font-bold text-gray-800 mb-1">නම: <span id="display-student-name" class="font-extrabold text-blue-800">--</span></p>
-                <!-- Reduced text size from text-md to text-sm -->
                 <p class="text-sm font-semibold text-gray-600">පන්තිය: <span id="display-student-class" class="font-bold text-blue-700">--</span></p>
             </div>
 
             <!-- Detailed Score and Percentage Display -->
-            <!-- Reduced text size from text-xl to text-lg -->
             <p id="correct-answers-count" class="text-lg font-bold text-center mb-2 text-gray-700"></p>
-            <!-- Reduced text size from text-2xl to text-xl (This is the main score) -->
             <p id="final-percentage" class="text-3xl font-black text-center mb-3"></p>
 
-            <!-- Reduced text size from text-sm to text-xs -->
             <p id="result-date" class="text-xs text-center text-gray-600">දිනය සහ වේලාව: --</p>
         </div>
         
         <!-- Action Buttons (outside the capture area) -->
-        <!-- Reduced button padding and margin -->
         <button onclick="captureResultsAsImage()" class="w-full bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700 transition duration-300 mb-3 shadow-md transform hover:scale-[1.02]">
             ප්‍රතිඵල ලේඛනය බාගත කරන්න (JPEG)
         </button>
         
-        <!-- Reduced button padding -->
         <a href="index.html"><button onclick="resetQuizState()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition duration-300">
             නැවත මුලට යන්න (Go to Start)
         </button></a>
     </div>
 </div>
 
-<!-- 5. INSTRUCTION MODAL (POPUP MENU) -->
+<!-- 5. INSTRUCTION MODAL -->
 <div id="instruction-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden">
-    <div id="modal-content" class="bg-white rounded-xl shadow-2xl p-5 m-4 max-w-sm sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <!-- Reduced H3 size from text-2xl to text-xl -->
+    <div id="instruction-modal-content" class="bg-white rounded-xl shadow-2xl p-5 m-4 max-w-sm sm:max-w-md w-full max-h-[90vh] overflow-y-auto">
         <h3 class="text-xl font-bold text-blue-700 mb-3 border-b pb-1.5">⚠️ ප්‍රශ්නාවලියේ උපදෙස්</h3>
         
-        <!-- Reduced text size from text-base to text-sm -->
         <ul class="text-left text-gray-700 space-y-2 list-disc list-inside mb-4 text-sm">
             <li>සියලුම ප්‍රශ්න සඳහා පිළිතුරු දියයුතුය.</li>
-            <li>සෑම ප්‍රශ්නයක් සඳහාම පිළිතුරු දීමට ඔබට තත්පර 30ක කාලයක් ලැබේ.</li>
+            <li>සෑම ප්‍රශ්නයක් සඳහාම පිළිතුරු දීමට ඔබට <span id="instruction-time-limit" class="font-bold text-red-600">30</span> තත්පරයේ කාලයක් ලැබේ.</li>
             <li>නියමිත කාලය තුළ පිළිතුරු ලබා දීමට නොහැකි වුවහොත් එය අවසන් ලකුණු වලට එකතු වන්නේ නැත.</li>
             <li>ගැටළුවක් ඇතිනම් ගයාන් සර්ව අමතන්න. (විමසීම්: 071 327 6655 )</li>
             <li>👮 ආරක්ෂක නීති (Security Rules):
-                <ul class="list-disc list-inside ml-4 mt-1 space-y-0.5 text-xs text-red-600 font-medium"> <!-- Reduced nested list size -->
+                <ul class="list-disc list-inside ml-4 mt-1 space-y-0.5 text-xs text-red-600 font-medium">
                     <li>Right click කිරීම සහ Mobile long press කිරීම අවහිර කර ඇත.</li>
                     <li>වෙනත් Tab එකකට හෝ Window එකකට මාරු වුවහොත් ප්‍රශ්නාවලියේ ප්‍රශ්න වෙනස්වී ආරම්භ විය හැක. කල්පනාකාරී වන්න.</li>
                     <li>ප්‍රශ්න Copy & Past කිරීම අවහිර කර ඇත.</li>
@@ -226,12 +257,83 @@
             </li>
         </ul>
         
-        <!-- Reduced button padding -->
         <button onclick="hideInstructions()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 transition duration-300 shadow-lg">
             තේරුම් ගත්තා 👍 (Got It)
         </button>
     </div>
 </div>
+
+<!-- 6. SETTINGS MODAL (සැකසුම් මෙනුව) - UPDATED FOR MOBILE -->
+<div id="settings-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden">
+    <!-- !!! මානයන් මෙහිදී වෙනස් කර ඇත: p-4, m-3, max-w-xs, max-h-[80vh] !!! -->
+    <div id="settings-modal-content" class="bg-white rounded-xl shadow-2xl p-4 m-3 w-full max-w-xs sm:max-w-sm max-h-[80vh] overflow-y-auto">
+        <h3 class="text-xl font-bold text-yellow-700 mb-4 border-b pb-1.5">⚙️ ප්‍රශ්නාවලියේ සැකසුම් (Admin)</h3>
+        
+        <div class="space-y-3">
+            
+            <!-- Setting 1: Max Attempts (NEW SETTING) -->
+            <div class="flex justify-between items-center p-2 bg-red-50 rounded-lg border border-red-200">
+                <label for="setting-max-attempts" class="text-sm font-medium text-red-700">උපරිම උත්සාහයන් (Max Attempts per Device):</label>
+                <div>
+                    <input type="number" id="setting-max-attempts" min="1" max="10" value="3" 
+                           class="w-16 p-1 border border-red-300 rounded-lg text-center text-sm font-bold text-red-700 focus:ring-red-500">
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (පරිගණකයකට)</span>
+                </div>
+            </div>
+
+            <!-- Setting 2: Quiz Length -->
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
+                <label for="setting-quiz-length" class="text-sm font-medium text-gray-700">ප්‍රශ්න ගණන (Total Questions):</label>
+                <div>
+                    <input type="number" id="setting-quiz-length" min="1" max="35" value="5" 
+                           class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> (උපරිම: 35)</span>
+                </div>
+            </div>
+
+            <!-- Setting 3: Time Limit -->
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
+                <label for="setting-time-limit" class="text-sm font-medium text-gray-700">කාල සීමාව (Time Limit per Q):</label>
+                <div>
+                    <input type="number" id="setting-time-limit" min="10" max="120" value="30" 
+                           class="w-16 p-1 border border-gray-300 rounded-lg text-center text-sm font-bold text-indigo-700 focus:ring-indigo-500">
+                    <span class="text-xs text-gray-500 block text-right mt-0.5"> තත්පර (Seconds)</span>
+                </div>
+            </div>
+
+            <!-- Setting 4: Shuffle Questions -->
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
+                <label for="setting-shuffle" class="text-sm font-medium text-gray-700">ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීම (Shuffle Questions):</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="setting-shuffle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Setting 5: Auto Reset on Tab Switch -->
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg border">
+                <label for="setting-auto-reset" class="text-sm font-medium text-gray-700">ටැබ් මාරු කළ විට යළි පිහිටුවීම (Auto Reset on Tab Switch):</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="setting-auto-reset" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+        </div>
+        
+        <!-- Save Settings Button -->
+        <button onclick="saveSettings()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg mt-4 text-sm font-semibold">
+            සැකසුම් සුරකින්න (Save Settings)
+        </button>
+        
+        <!-- Reset Global Lock Button (Now resets the attempt counter) -->
+        <button onclick="confirmAndResetDeviceAttempts()" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-300 shadow-lg mt-2 text-sm font-semibold">
+            🚨 මෙම පරිගණකයේ උත්සාහයන් Reset කරන්න (Reset Device Attempts)
+        </button>
+
+    </div>
+</div>
+
 
 <script>
     // ----------------------------------------------------------------------
@@ -275,26 +377,27 @@
     // [QUIZ LOGIC - ප්‍රශ්නාවලියේ කේතය]
     // ----------------------------------------------------------------------
     
-    // Constants for the quiz
-    const TIME_LIMIT = 30; // තත්පර වලින් කාලය
+    // Default settings (ආරම්භක සැකසුම්)
+    const DEFAULT_SETTINGS = {
+        maxAttempts: 3,                 // NEW: Max attempts per device (පරිගණකයකට උපරිම උත්සාහයන්)
+        quizLength: 5,                  
+        timeLimit: 30,                  
+        shuffleQuestions: true,         
+        autoResetOnTabSwitch: true      
+    };
+    
+    // Global settings object, loaded from localStorage or using defaults
+    let settings = { ...DEFAULT_SETTINGS };
 
-    // [SHUFFLE CONFIGURATION - අහඹු ලෙස පෙළගැස්වීමේ සැකසුම්]
-    // ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීමට true කරන්න, එසේ නොමැති නම් false කරන්න.
-    const SHUFFLE_QUESTIONS = true; 
-    
-    // [NEW: AUTO RESET CONFIGURATION - ස්වයංක්‍රීය යළි පිහිටුවීමේ සැකසුම්]
-    // වෙනත් Tab එකකට මාරු වූ විට ස්වයංක්‍රීයව යළි පිහිටුවීම සක්‍රියද/අක්‍රියද යන්න
-    // true: යළි පිහිටුවීම සිදුවේ | false: යළි පිහිටුවීම සිදු නොවේ
-    const AUTO_RESET_ON_TAB_SWITCH = true; // <--- ඔබට වෙනස් කිරීමට අවශ්‍ය නියතය මෙයයි
-    
     // Global variables
     let currentQuestionIndex = 0;
     let score = 0;
     let isQuestionLocked = false;
-    let timeRemaining = TIME_LIMIT;
+    let timeRemaining;
     let timerInterval;
+    let shuffledQuizData = [];
 
-    // NEW: Global variables for student info
+    // Global variables for student info
     let studentName = '';
     let studentClass = '';
 
@@ -303,29 +406,185 @@
     const quizContainer = document.getElementById('quiz-container');
     const resultsContainer = document.getElementById('results-container');
     const timerDisplay = document.getElementById('timer-display');
-    const instructionModal = document.getElementById('instruction-modal'); // MODAL CONTAINER
-    const modalContent = document.getElementById('modal-content'); // MODAL CONTENT DIV (for animation)
+    const instructionModal = document.getElementById('instruction-modal');
+    const instructionModalContent = document.getElementById('instruction-modal-content');
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsModalContent = document.getElementById('settings-modal-content');
+    const attemptMessage = document.getElementById('attempt-message'); // Renamed message element
+    const startQuizButton = document.getElementById('start-quiz-button');
+
 
     // ----------------------------------------------------------------------
-    // [MODAL FUNCTIONS - Popup Menu ක්‍රියාකාරීත්වය]
+    // [LOCAL STORAGE: MULTIPLE ATTEMPTS COUNTER]
+    // ----------------------------------------------------------------------
+
+    // The key used to store the attempt count on this device
+    const ATTEMPT_COUNT_KEY = 'quiz_device_attempts_count'; 
+    
+    /**
+     * Gets the current attempt count from localStorage.
+     * @returns {number} The current count (defaults to 0).
+     */
+    function getCurrentAttemptCount() {
+        return parseInt(localStorage.getItem(ATTEMPT_COUNT_KEY) || '0', 10); 
+    }
+
+    /**
+     * Increments the attempt counter when the quiz is finished.
+     */
+    function incrementDeviceAttempt() {
+        let currentAttempts = getCurrentAttemptCount();
+        currentAttempts++;
+        localStorage.setItem(ATTEMPT_COUNT_KEY, currentAttempts.toString());
+        console.log(`Device attempt counter incremented to: ${currentAttempts}`);
+    }
+
+    /**
+     * Resets the device attempt counter to 0. (Admin Function)
+     */
+    function resetDeviceAttempts() {
+        localStorage.setItem(ATTEMPT_COUNT_KEY, '0');
+        console.log("SUCCESS: Device attempt counter has been reset to 0.");
+
+        // After clearing, re-run the check to update the UI
+        if (!startScreen.classList.contains('hidden')) {
+             checkDeviceAttempts(); 
+        }
+    }
+
+    /**
+     * Handles the button click for resetting the device attempts.
+     */
+    function confirmAndResetDeviceAttempts() {
+        console.warn("ADMIN ACTION: Attempting to reset the device attempt counter.");
+        
+        // Execute the action directly (since alert/confirm is forbidden)
+        resetDeviceAttempts();
+        
+        // Hide the settings modal after admin action
+        settingsModal.classList.add('hidden');
+        settingsModalContent.classList.remove('modal-enter-animation');
+    }
+    
+    /**
+     * Checks the device attempt status.
+     * Updates the message AND disables the Start Quiz button if attempts are exhausted.
+     * @returns {boolean} True if attempts are exhausted, false otherwise.
+     */
+    function checkDeviceAttempts() {
+        const currentAttempts = getCurrentAttemptCount();
+        const maxAttempts = settings.maxAttempts;
+        const attemptsLeft = maxAttempts - currentAttempts;
+        
+        // Default: Enable the button and reset message styles
+        startQuizButton.disabled = false;
+        startQuizButton.classList.remove('bg-gray-400', 'disabled');
+        startQuizButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'transform', 'hover:scale-[1.01]');
+        attemptMessage.classList.remove('hidden', 'text-red-600');
+        attemptMessage.classList.add('text-blue-600');
+
+        if (attemptsLeft <= 0) {
+            // --- ATTEMPTS EXHAUSTED: DISABLE THE BUTTON ---
+            startQuizButton.disabled = true;
+            startQuizButton.classList.add('bg-gray-400', 'disabled');
+            startQuizButton.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'transform', 'hover:scale-[1.01]');
+            // ------------------------------------------
+
+            attemptMessage.textContent = `🚫 මෙම පරිගණකය භාවිතයෙන් උපරිම උත්සාහයන් (${maxAttempts}) සම්පූර්ණ කර ඇත. නැවත උත්සාහ කළ නොහැක.`;
+            attemptMessage.classList.remove('text-blue-600');
+            attemptMessage.classList.add('text-red-600');
+            return true; // Lock is active
+        } else {
+            attemptMessage.textContent = `✅ ඉතිරි උත්සාහයන්: ${attemptsLeft} / ${maxAttempts}`;
+            return false; // Lock is inactive
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // [MODAL FUNCTIONS]
     // ----------------------------------------------------------------------
 
     function showInstructions() {
+        document.getElementById('instruction-time-limit').textContent = settings.timeLimit;
         instructionModal.classList.remove('hidden');
-        // Add animation class when showing the modal
-        modalContent.classList.add('modal-enter-animation');
+        instructionModalContent.classList.add('modal-enter-animation');
     }
 
     function hideInstructions() {
-        // Remove animation class and hide the modal
         instructionModal.classList.add('hidden');
-        modalContent.classList.remove('modal-enter-animation');
+        instructionModalContent.classList.remove('modal-enter-animation');
     }
-
-    // ----------------------------------------------------------------------
-    // [STUDENT INFO VALIDATION]
-    // ----------------------------------------------------------------------
     
+    function openSettings() {
+        // Load current settings into the modal inputs before showing
+        document.getElementById('setting-max-attempts').value = settings.maxAttempts; // New setting
+        document.getElementById('setting-quiz-length').value = settings.quizLength;
+        document.getElementById('setting-time-limit').value = settings.timeLimit;
+        document.getElementById('setting-shuffle').checked = settings.shuffleQuestions;
+        document.getElementById('setting-auto-reset').checked = settings.autoResetOnTabSwitch;
+        
+        settingsModal.classList.remove('hidden');
+        settingsModalContent.classList.add('modal-enter-animation');
+    }
+    
+    function saveSettings() {
+        // Get values from inputs
+        const newMaxAttempts = parseInt(document.getElementById('setting-max-attempts').value, 10); // New
+        const newQuizLength = parseInt(document.getElementById('setting-quiz-length').value, 10);
+        const newTimeLimit = parseInt(document.getElementById('setting-time-limit').value, 10);
+        const newShuffle = document.getElementById('setting-shuffle').checked;
+        const newAutoReset = document.getElementById('setting-auto-reset').checked;
+        
+        // Validation (using console.error as alert() is forbidden)
+        const maxQuestions = quizData.length;
+        if (newMaxAttempts < 1 || newMaxAttempts > 10) {
+            console.error("උපරිම උත්සාහයන් 1 සහ 10 අතර විය යුතුය.");
+            return;
+        }
+        if (newQuizLength < 1 || newQuizLength > maxQuestions) {
+            console.error(`ප්‍රශ්න ගණන 1 සහ ${maxQuestions} අතර විය යුතුය.`);
+            return;
+        }
+        if (newTimeLimit < 10 || newTimeLimit > 120) {
+            console.error("කාල සීමාව තත්පර 10 සහ 120 අතර විය යුතුය.");
+            return;
+        }
+
+        // Apply new settings
+        settings.maxAttempts = newMaxAttempts; // New
+        settings.quizLength = newQuizLength;
+        settings.timeLimit = newTimeLimit;
+        settings.shuffleQuestions = newShuffle;
+        settings.autoResetOnTabSwitch = newAutoReset;
+        
+        // Save to Local Storage for persistence
+        localStorage.setItem('quizSettings', JSON.stringify(settings));
+
+        // Hide modal
+        settingsModal.classList.add('hidden');
+        settingsModalContent.classList.remove('modal-enter-animation');
+        
+        console.log("Settings saved:", settings);
+        // Re-check attempts status after changing settings
+        checkDeviceAttempts(); 
+    }
+    
+    function loadSettings() {
+        const savedSettings = localStorage.getItem('quizSettings');
+        if (savedSettings) {
+            try {
+                settings = { ...DEFAULT_SETTINGS, ...JSON.parse(savedSettings) };
+            } catch (e) {
+                console.error("Error loading settings from localStorage:", e);
+                settings = { ...DEFAULT_SETTINGS };
+            }
+        }
+    }
+    
+    // ----------------------------------------------------------------------
+    // [QUIZ START VALIDATION]
+    // ----------------------------------------------------------------------
+
     function validateAndStartQuiz() {
         const nameInput = document.getElementById('student-name');
         const classInput = document.getElementById('student-class');
@@ -333,10 +592,12 @@
 
         studentName = nameInput.value.trim();
         studentClass = classInput.value.trim();
-
+        
+        validationMessage.classList.add('hidden');
+        
+        // 1. Check for empty fields
         if (studentName === '' || studentClass === '') {
             validationMessage.classList.remove('hidden');
-            // Shake effect for attention (optional)
             nameInput.classList.add('ring-2', 'ring-red-500');
             classInput.classList.add('ring-2', 'ring-red-500');
             setTimeout(() => {
@@ -346,12 +607,18 @@
             return;
         }
 
-        validationMessage.classList.add('hidden');
-        startQuiz(); // Proceed to start the quiz
+        // 2. Check device attempt status before starting
+        if (checkDeviceAttempts()) {
+            console.warn("Quiz start blocked: Maximum attempts reached on this device.");
+            return; // STOP the quiz from starting
+        }
+
+        // 3. If validation passed and attempts remain, proceed
+        startQuiz(); 
     }
 
     // ----------------------------------------------------------------------
-    // [ප්‍රශ්නාවලියේ දත්ත / QUIZ DATA SECTION]
+    // [QUIZ DATA SECTION]
     // ----------------------------------------------------------------------
     const quizData = [
     // Q1
@@ -705,19 +972,17 @@
         ]
     },
 
-];
+    ];
 
-    // Array Shuffle Function (Fisher-Yates) - ප්‍රශ්න සහ පිළිතුරු අහඹු ලෙස පෙළගැස්වීම සඳහා
+    // Array Shuffle Function (Fisher-Yates)
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            // Correct destructuring swap
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
     }
 
-    // Handles the quiz when the time for a question runs out
     function handleTimeout() {
         if (timerInterval) {
             clearInterval(timerInterval);
@@ -728,9 +993,8 @@
         const optionsList = document.getElementById('options-list');
         const feedbackMessage = document.getElementById('feedback-message');
         const nextButton = document.getElementById('next-button');
-        const currentQ = quizData[currentQuestionIndex];
+        const currentQ = shuffledQuizData[currentQuestionIndex];
         
-        // Show the correct answer (color it green)
         if (optionsList) {
             Array.from(optionsList.children).forEach(button => {
                 const answer = button.getAttribute('data-answer');
@@ -742,14 +1006,12 @@
             });
         }
         
-        // Show feedback message for timeout
         if (feedbackMessage) {
             feedbackMessage.textContent = 'කාලය අවසන්! පිළිතුරක් තේරුවේ නැත. (Time\'s up! No answer selected.)';
             feedbackMessage.classList.remove('hidden', 'text-lime-600');
             feedbackMessage.classList.add('text-red-500');
         }
         
-        // Enable Next button
         if (nextButton) {
             nextButton.disabled = false;
             nextButton.classList.remove('bg-gray-400', 'disabled');
@@ -757,18 +1019,15 @@
         }
     }
 
-    // Starts the timer for the current question
     function startTimer() {
-        // Clear any existing timer
         if (timerInterval) {
             clearInterval(timerInterval);
         }
 
-        timeRemaining = TIME_LIMIT;
+        timeRemaining = settings.timeLimit;
         const timeLeftElement = document.getElementById('time-left');
         const timerProgressElement = document.getElementById('timer-progress');
 
-        // Update display immediately and set bar to 100%
         if (timeLeftElement) timeLeftElement.textContent = timeRemaining;
         if (timerProgressElement) {
             timerProgressElement.style.width = '100%';
@@ -776,20 +1035,15 @@
             timerProgressElement.classList.add('bg-red-500');
         }
         
-        // Start countdown
         timerInterval = setInterval(() => {
             timeRemaining--;
 
-            // Update time display
             if (timeLeftElement) timeLeftElement.textContent = timeRemaining;
             
-            // Update progress bar
-            const progress = (timeRemaining / TIME_LIMIT) * 100;
+            const progress = (timeRemaining / settings.timeLimit) * 100;
             if (timerProgressElement) timerProgressElement.style.width = `${progress}%`;
 
-            // Change bar color when time is low
             if (timeRemaining <= 5 && timerProgressElement) {
-                // Flash effect for low time (optional)
                 timerProgressElement.classList.toggle('bg-red-700');
             }
 
@@ -800,35 +1054,30 @@
         }, 1000);
     }
 
-    // ප්‍රශ්නය සහ පිළිතුරු විදැහුම් කිරීමේ කාර්යය
     function renderQuestion() {
-        if (currentQuestionIndex >= quizData.length) {
+        if (currentQuestionIndex >= shuffledQuizData.length) {
             showResults();
             return;
         }
 
         isQuestionLocked = false;
-        const currentQ = quizData[currentQuestionIndex];
+        const currentQ = shuffledQuizData[currentQuestionIndex];
         
-        // නිවැරදි පිළිතුර සහ වැරදි පිළිතුරු එකතු කර අහඹු ලෙස පෙළගැස්වීම
-        // distractors.slice(0, 3) මඟින් නිවැරදි පිළිතුරට අමතරව වැරදි පිළිතුරු 3ක් (මුළු පිළිතුරු 4ක්) තෝරා ගනී.
         const options = shuffleArray([
             currentQ.correct, 
             ...currentQ.distractors.slice(0, 3) 
         ]);
 
-        const totalQuestions = quizData.length; // මුළු ප්‍රශ්න ගණන (10)
+        const totalQuestions = shuffledQuizData.length;
         const questionNumber = currentQuestionIndex + 1;
         
 
         quizContainer.innerHTML = `
-            <div class="mb-4"> <!-- Reduced margin -->
-                <!-- Reduced text size from text-lg to text-base -->
+            <div class="mb-4">
                 <p class="text-base font-semibold text-cyan-700 mb-2">ප්‍රශ්නය ${questionNumber} / ${totalQuestions}</p>
-                <!-- Reduced text size from text-xl to text-lg -->
                 <h2 class="question-text text-lg font-bold text-gray-700">${currentQ.question}</h2>
             </div>
-            <div id="options-list" class="space-y-2"> <!-- Reduced space -->
+            <div id="options-list" class="space-y-2">
                 ${options.map((option, index) => `
                     <button 
                         class="option-button w-full text-left p-3 border border-gray-300 rounded-lg text-gray-700 shadow-sm transition duration-150 ease-in-out bg-gray-50 text-base"
@@ -839,21 +1088,18 @@
                     </button>
                 `).join('')}
             </div>
-            <div id="feedback-message" class="mt-3 text-center text-sm font-medium hidden"></div> <!-- Reduced margin -->
-            <button id="next-button" onclick="nextQuestion()" class="mt-4 w-full bg-gray-400 text-white py-2.5 rounded-lg disabled transition duration-300" disabled> <!-- Reduced margin and padding -->
+            <div id="feedback-message" class="mt-3 text-center text-sm font-medium hidden"></div>
+            <button id="next-button" onclick="nextQuestion()" class="mt-4 w-full bg-gray-400 text-white py-2.5 rounded-lg disabled transition duration-300" disabled>
                 ඊළඟ ප්‍රශ්නය (Next Question)
             </button>
         `;
         
-        // Start the timer for the new question
         startTimer();
     }
 
-    // පිළිතුර පරීක්ෂා කිරීමේ කාර්යය
     function checkAnswer(selectedButton, correctAnswer) {
         if (isQuestionLocked) return;
         
-        // Stop the timer immediately
         if (timerInterval) {
             clearInterval(timerInterval);
         }
@@ -866,12 +1112,10 @@
         const nextButton = document.getElementById('next-button');
         let isCorrect = false;
 
-        // සියලුම බොත්තම් disable කිරීම
         Array.from(optionsList).forEach(button => {
             button.classList.add('disabled');
         });
         
-        // නිවැරදි පිළිතුර සොයාගෙන වර්ණ ගැන්වීම
         Array.from(optionsList).forEach(button => {
             const answer = button.getAttribute('data-answer');
             if (answer === correctAnswer) {
@@ -884,86 +1128,80 @@
 
         if (isCorrect) {
             score++;
-            selectedButton.classList.add('correct-answer'); // කොළ පාට
+            selectedButton.classList.add('correct-answer');
             feedbackMessage.textContent = 'නිවැරදියි! (Correct!)';
             feedbackMessage.classList.remove('text-red-500', 'hidden');
             feedbackMessage.classList.add('text-lime-600');
         } else {
-            selectedButton.classList.add('incorrect-answer'); // රතු පාට
+            selectedButton.classList.add('incorrect-answer');
             feedbackMessage.textContent = 'වැරදියි! නිවැරදි පිළිතුර කොළ පැහැයෙන් දක්වා ඇත. (Incorrect!)';
             feedbackMessage.classList.remove('text-lime-600', 'hidden');
             feedbackMessage.classList.add('text-red-500');
         }
 
-        // Next බොත්තම සක්‍රිය කිරීම
         nextButton.disabled = false;
         nextButton.classList.remove('bg-gray-400', 'disabled');
         nextButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
     }
 
-    // ඊළඟ ප්‍රශ්නයට යාමේ කාර්යය
     function nextQuestion() {
         currentQuestionIndex++;
         renderQuestion();
     }
 
-    // ප්‍රතිඵල රූපයක් ලෙස බාගත කිරීමේ කාර්යය
     function captureResultsAsImage() {
         const card = document.getElementById('result-card-to-capture');
         
-        // Use html2canvas to capture the content
         html2canvas(card, {
-            scale: 2, // Increase scale for higher resolution
+            scale: 2,
             allowTaint: true, 
             useCORS: true 
         }).then(canvas => {
-            // Convert canvas to JPEG Data URL
-            const imageUrl = canvas.toDataURL('image/jpeg', 0.9); // 0.9 quality
+            const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
             
-            // Create a temporary link element for download
             const link = document.createElement('a');
             const date = new Date().toLocaleDateString('si-LK');
-            link.download = `ICT_Quiz_Scorecard_${studentName}_${date}.jpeg`; // Updated filename
-            link.href = imageUrl;
+            link.download = `ICT_Quiz_Scorecard_${studentName}_${date}.jpeg`;
             
-            // Trigger the download
             document.body.appendChild(link);
+            link.href = imageUrl;
             link.click();
             document.body.removeChild(link);
+            
         }).catch(error => {
             console.error('HTML to Canvas conversion failed:', error);
-            // Error handling
         });
     }
 
-    // ප්‍රතිඵල පෙන්වීමේ කාර්යය
     function showResults() {
-        // Clear the timer when results are shown
+        // Clear the timer
         if (timerInterval) {
             clearInterval(timerInterval);
         }
-        timerDisplay.classList.add('hidden'); // Hide timer on results page
+        
+        // NEW: Increment the device attempt counter
+        incrementDeviceAttempt();
+        
+        // UI changes
+        timerDisplay.classList.add('hidden');
         quizContainer.classList.add('hidden');
         resultsContainer.classList.remove('hidden');
         
         const correctAnswersCountElement = document.getElementById('correct-answers-count');
         const finalPercentageElement = document.getElementById('final-percentage');
         
-        // NEW: Set student name and class in the result card
+        // Set student name and class in the result card
         document.getElementById('display-student-name').textContent = studentName || 'අනාවරණය කර නැත';
         document.getElementById('display-student-class').textContent = studentClass || 'අනාවරණය කර නැත';
 
-        const totalQuestions = quizData.length; // මුළු ප්‍රශ්න ගණන (10)
+        const totalQuestions = shuffledQuizData.length;
         const percentage = Math.round((score / totalQuestions) * 100);
         
-        // Update the detailed score elements
         correctAnswersCountElement.textContent = ` නිවැරදි පිළිතුරු: ${score} / ${totalQuestions}`;
         finalPercentageElement.textContent = `ලකුණු: ${percentage}%`;
 
-        // Reset and set color class based on percentage for the percentage display
+        // Color determination based on score
         finalPercentageElement.classList.remove('text-red-500', 'text-orange-500', 'text-lime-600', 'text-gray-700');
-
-        // ලකුණු අනුව වර්ණය තීරණය කිරීම (Color determination based on score)
         if (percentage >= 70) {
             finalPercentageElement.classList.add('text-lime-600');
         } else if (percentage >= 40) {
@@ -972,15 +1210,16 @@
             finalPercentageElement.classList.add('text-red-500');
         }
         
-        // Update date/time for the captured card
         const date = new Date().toLocaleDateString('si-LK');
         const time = new Date().toLocaleTimeString('si-LK', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('result-date').textContent = `දිනය සහ වේලාව: ${date} | ${time}`;
+        
+        // After showing results, check the attempts status to update the start screen message
+        checkDeviceAttempts(); 
     }
     
     // --- Reset Quiz State and Show Start Screen ---
     function resetQuizState() {
-        // Stop any running timer
         if (timerInterval) {
             clearInterval(timerInterval);
         }
@@ -989,65 +1228,62 @@
         currentQuestionIndex = 0;
         score = 0;
         isQuestionLocked = false;
-        timeRemaining = TIME_LIMIT;
+        shuffledQuizData = [];
         
-        // NEW: Clear student info and reset input fields
-        studentName = '';
-        studentClass = '';
-        const nameInput = document.getElementById('student-name');
-        const classInput = document.getElementById('student-class');
-        if (nameInput) nameInput.value = '';
-        if (classInput) classInput.value = '';
-        document.getElementById('validation-message').classList.add('hidden');
-
         // Show the Start Screen and hide quiz/results/timer
         startScreen.classList.remove('hidden');
         quizContainer.classList.add('hidden');
         resultsContainer.classList.add('hidden');
         timerDisplay.classList.add('hidden');
         
-        // Ensure modal is also hidden and animation class removed
+        // Ensure modals are also hidden and animation class removed
         instructionModal.classList.add('hidden');
-        modalContent.classList.remove('modal-enter-animation');
+        instructionModalContent.classList.remove('modal-enter-animation');
+        settingsModal.classList.add('hidden');
+        settingsModalContent.classList.remove('modal-enter-animation');
+
+        // Check the attempt status to update the start screen UI
+        checkDeviceAttempts();
     }
 
-    // ප්‍රශ්නාවලිය ආරම්භ කිරීමේ/නැවත ආරම්භ කිරීමේ කාර්යය
     function startQuiz() {
-        // Validation is now handled in validateAndStartQuiz()
         
-        // Reset the state to ensure a clean start, but keep the start screen hidden for now
+        // 1. Take a slice of the main quizData based on settings.quizLength
+        shuffledQuizData = quizData.slice(0, settings.quizLength);
         
-        startScreen.classList.add('hidden'); // Hide the start screen explicitly
-        
-        // ප්‍රශ්නාවලිය ආරම්භ කිරීමට පෙර ප්‍රශ්න අහඹු ලෙස පෙළගැස්වීම
-        // Conditionally shuffle the questions based on the SHUFFLE_QUESTIONS constant
-        if (SHUFFLE_QUESTIONS) { 
-            shuffleArray(quizData); 
+        // 2. Conditionally shuffle the questions based on the setting
+        if (settings.shuffleQuestions) { 
+            shuffledQuizData = shuffleArray(shuffledQuizData); 
         }
         
-        // Transition from Start Screen to Quiz Container
+        startScreen.classList.add('hidden');
+        
         quizContainer.classList.remove('hidden');
         timerDisplay.classList.remove('hidden');
         
-        // Render the first question (Question 1)
         renderQuestion();
     }
     
-    // --- 4. TAB CHANGE / WINDOW BLUR DETECTION (වෙනත් Tab එකකට ගියහොත් Reset කිරීම) ---
+    // --- TAB CHANGE / WINDOW BLUR DETECTION ---
     document.addEventListener("visibilitychange", function() {
-        // යළි පිහිටුවීම සක්‍රීය නොවේ නම්, ක්‍රියාත්මක වීම නවත්වන්න
-        if (!AUTO_RESET_ON_TAB_SWITCH) { 
+        if (!settings.autoResetOnTabSwitch) {
             console.log("Auto reset on tab switch is disabled.");
             return; 
         }
 
-        // When the document is hidden (user switched to another tab/window)
         if (document.hidden) {
-            // Only reset if the start screen is hidden, meaning the quiz is currently running or showing results
-            if (startScreen.classList.contains('hidden')) {
+            if (startScreen.classList.contains('hidden') && resultsContainer.classList.contains('hidden')) {
                  resetQuizState();
+                 console.warn("Security Alert: Quiz reset due to tab switch!");
             }
         }
+    });
+    
+    // Initial setup: Load settings and check device attempts when the script runs
+    window.addEventListener('load', () => {
+        loadSettings();
+        resetQuizState();
+        checkDeviceAttempts();
     });
 
 </script>
